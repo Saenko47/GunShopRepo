@@ -1,15 +1,12 @@
-﻿using GunShopBackPart.DTOs;
+﻿using GunShopBackPart.Models;
 
-namespace GunShopBackPart.Models
+namespace GunShopBackPart.DTOs
 {
-    public class Ammo: BaseProduct
+    public class AmmoDTO: ProductDTO
     {
         public override ProductType ProductType => ProductType.Ammo;
         public Caliber Caliber { get; set; }
 
         public int AmountInBox { get; set; }
-
-       
-       
     }
 }

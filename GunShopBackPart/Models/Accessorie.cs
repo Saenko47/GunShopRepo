@@ -1,4 +1,6 @@
-﻿namespace GunShopBackPart.Models
+﻿using GunShopBackPart.DTOs;
+
+namespace GunShopBackPart.Models
 {
     public enum AccessoryType
     {
@@ -13,13 +15,12 @@
         Safety,         // Предохранительные аксессуары
         Other
     }
-    public class Accessories:BaseProduct
+    public class Accessorie:BaseProduct
     {
-        public string Name { get; set; } = string.Empty;
         public AccessoryType Type { get; set; }
+        public override ProductType ProductType => ProductType.Accessory;
 
-        public int SupplierId { get; set; }
-        public Supplier Supplier { get; set; } = null!;
+
 
     }
 }

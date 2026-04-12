@@ -1,7 +1,13 @@
 using GunShopBackPart.Data;
+using GunShopBackPart.Interfaces;
+using GunShopBackPart.Repository;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 
 // Add services to the container.
 
@@ -10,8 +16,24 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped(typeof(IRepo<>), typeof(Repository<>));
+builder.Services.AddScoped(typeof(IProductServices), typeof(ProductServices));
 
 var app = builder.Build();
+
+app.UseSwagger();
+app.UseSwaggerUI();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
+
+    if (db.Database.CanConnect())
+        Console.WriteLine("DB connected");
+    else
+        Console.WriteLine("DB failed");
+}
+Console.WriteLine(app.Environment.EnvironmentName);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

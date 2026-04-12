@@ -1,4 +1,6 @@
-﻿namespace GunShopBackPart.Models
+﻿using GunShopBackPart.DTOs;
+
+namespace GunShopBackPart.Models
 {
     public enum GunType
     {
@@ -16,13 +18,7 @@
     }
     public class Gun: BaseProduct
     {
-
-        public string Name { get; set; } = string.Empty;
-
-        public int SupplierId { get; set; }
-
-        public Supplier Supplier { get; set; } = null!;
-
+        public override ProductType ProductType => ProductType.Gun;
 
         public Caliber Caliber { get; set; }
         public GunType GunType { get; set; }
