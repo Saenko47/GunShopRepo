@@ -18,6 +18,13 @@ namespace GunShopBackPart.Repository
             this.context = context;
             set = context.Set<BaseProduct>();
         }
+        public async Task<ProductDTO?> GetByIdAsync(int id)
+        {
+            var res = await set
+    .Include(x => x.Supplier)
+    .FirstOrDefaultAsync(x => x.Id == id);
+            return res.ToProductDTO();
+        }
         public async Task<List<ProductDTO>> GetObjectsByPages(PageQuery pq, Filter filter)
         {
 
@@ -43,9 +50,14 @@ namespace GunShopBackPart.Repository
             {
                 query = query.Where(e => EF.Property<AccessoryType>(e, "Type") == filter.Type.Value);
             }
-            if (filter.SupplierName != null)
+            if (filter.RequiredPermit.HasValue)
             {
-                query = query.Where(e => EF.Property<string>(e, "SupplierName").Contains(filter.SupplierName));
+                query = query.Where(e => EF.Property<WeaponPermit>(e, "RequiredPermit") == filter.RequiredPermit.Value);
+            }
+            if (!string.IsNullOrEmpty(filter.SupplierName))
+            {
+                query = query.Where(e =>
+                    e.Supplier.Name.Contains(filter.SupplierName));
             }
 
             var res = await query.Skip((pq.Page - 1) * pq.PageSize).Take(pq.PageSize).ToListAsync();

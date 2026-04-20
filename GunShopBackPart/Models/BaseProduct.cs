@@ -10,9 +10,12 @@ namespace GunShopBackPart.Models
 
         public string Description { get; set; } = string.Empty;
         public decimal Price { get; set; } = 0;
-        public int SupplierId { get; set; }
+        public int SupplierId { get; set; } = 0;
         public Supplier Supplier { get; set; } = null!;
-
+        public WeaponPermit RequiredPermit { get; set; } = WeaponPermit.None;
         public abstract ProductType ProductType { get; }
+
+        public List<InventoryItem> InventoryItems { get; set; } = new List<InventoryItem>();
+
     }
 }

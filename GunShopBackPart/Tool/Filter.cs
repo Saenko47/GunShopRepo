@@ -12,6 +12,7 @@ namespace GunShopBackPart.Tool
         public Caliber? Caliber { get;  set; } = null;
 
         public AccessoryType? Type { get;  set; } = null;
+        public WeaponPermit? RequiredPermit { get;  set; } = null;
 
         public string? SupplierName { get;  set; } = null;  
 

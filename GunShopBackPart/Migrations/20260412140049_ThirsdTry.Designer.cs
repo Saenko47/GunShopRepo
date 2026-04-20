@@ -4,6 +4,7 @@ using GunShopBackPart.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GunShopBackPart.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20260412140049_ThirsdTry")]
+    partial class ThirsdTry
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -221,58 +224,6 @@ namespace GunShopBackPart.Migrations
                         .HasColumnType("int");
 
                     b.ToTable("Ammos", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 6,
-                            Description = "50 rounds",
-                            Name = "9mm Ammo Box",
-                            Price = 20m,
-                            SupplierId = 1,
-                            AmountInBox = 50,
-                            Caliber = 0
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Description = "50 rounds",
-                            Name = ".45 ACP Ammo",
-                            Price = 25m,
-                            SupplierId = 2,
-                            AmountInBox = 50,
-                            Caliber = 1
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Description = "30 rounds",
-                            Name = "5.56 Ammo",
-                            Price = 18m,
-                            SupplierId = 3,
-                            AmountInBox = 30,
-                            Caliber = 2
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Description = "30 rounds",
-                            Name = "7.62 Ammo",
-                            Price = 22m,
-                            SupplierId = 4,
-                            AmountInBox = 30,
-                            Caliber = 3
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Description = "25 shells",
-                            Name = "12 Gauge Shells",
-                            Price = 15m,
-                            SupplierId = 5,
-                            AmountInBox = 25,
-                            Caliber = 4
-                        });
                 });
 
             modelBuilder.Entity("GunShopBackPart.Models.Gun", b =>
@@ -286,58 +237,6 @@ namespace GunShopBackPart.Migrations
                         .HasColumnType("int");
 
                     b.ToTable("Guns", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "9mm pistol",
-                            Name = "Glock 17",
-                            Price = 500m,
-                            SupplierId = 1,
-                            Caliber = 0,
-                            GunType = 0
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = ".45 ACP pistol",
-                            Name = "Colt 1911",
-                            Price = 700m,
-                            SupplierId = 2,
-                            Caliber = 1,
-                            GunType = 0
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Description = "5.56 rifle",
-                            Name = "AR-15",
-                            Price = 1200m,
-                            SupplierId = 3,
-                            Caliber = 2,
-                            GunType = 1
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Description = "7.62 rifle",
-                            Name = "AK-47",
-                            Price = 1100m,
-                            SupplierId = 4,
-                            Caliber = 3,
-                            GunType = 1
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Description = "12 gauge shotgun",
-                            Name = "Remington 870",
-                            Price = 400m,
-                            SupplierId = 5,
-                            Caliber = 4,
-                            GunType = 2
-                        });
                 });
 
             modelBuilder.Entity("GunShopBackPart.Models.BaseProduct", b =>

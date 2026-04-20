@@ -5,6 +5,7 @@
         ForPistol,
         ForRifle,
         ForShotgun,
+        None
     }
     public class Customer
     {
@@ -14,9 +15,9 @@
         public string gmail { get; set; } = string.Empty;
         public string PhoneNumber { get; set; } = string.Empty;
 
-        public WeaponPermit WeaponPermit { get; set; }
 
          public List<ProductPurchase> GunPurchases { get; set; } = new List<ProductPurchase>();
+        public List<Licens> Licenses { get; set; } = new List<Licens>();
 
     }
 }

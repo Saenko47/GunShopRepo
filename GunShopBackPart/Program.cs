@@ -1,5 +1,6 @@
 using GunShopBackPart.Data;
 using GunShopBackPart.Interfaces;
+using GunShopBackPart.Models;
 using GunShopBackPart.Repository;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,6 +33,7 @@ using (var scope = app.Services.CreateScope())
         Console.WriteLine("DB connected");
     else
         Console.WriteLine("DB failed");
+ 
 }
 Console.WriteLine(app.Environment.EnvironmentName);
 

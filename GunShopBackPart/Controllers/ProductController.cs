@@ -11,23 +11,31 @@ namespace GunShopBackPart.Controllers
     public class ProductController : ControllerBase
     {
         public IProductServices _repo;
+      
 
         public ProductController(IProductServices repo)
         {
             _repo = repo;
+           
         }
 
         [HttpGet]
         public async Task<IActionResult> GetProducts([FromQuery] PageQuery pq, [FromQuery] Filter f)
         {
-           
-            
+
+
             var products = await _repo.GetObjectsByPages(pq, f);
 
-            
+
 
             return Ok(products);
 
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetProductById(int id)
+        {
+            var product = await _repo.GetByIdAsync(id);
+            return Ok(product);
         }
     }
 }

@@ -11,6 +11,7 @@ namespace GunShopBackPart.Tool
             productDTO.Name = product.Name;
             productDTO.Price = product.Price;
             productDTO.SupplierName = product.Supplier?.Name ?? "No name";
+            productDTO.RequiredPermit = product.RequiredPermit;
 
         }
 
