@@ -1,10 +1,11 @@
 ﻿using GunShopBackPart.Data;
+using GunShopBackPart.DTOs;
 using GunShopBackPart.Interfaces;
+using GunShopBackPart.Mappers;
 using GunShopBackPart.Models;
 using GunShopBackPart.Tool;
-using GunShopBackPart.Mappers;
 using Microsoft.EntityFrameworkCore;
-using GunShopBackPart.DTOs;
+using System.Linq.Expressions;
 
 namespace GunShopBackPart.Repository
 {
@@ -42,8 +43,12 @@ namespace GunShopBackPart.Repository
                 await _context.SaveChangesAsync();
             }
         }
+        public async Task<T?> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _context.Set<T>().FirstOrDefaultAsync(predicate);
+        }
 
-       
+
 
     }
 }

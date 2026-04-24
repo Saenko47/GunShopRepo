@@ -1,7 +1,9 @@
-﻿using GunShopBackPart.Interfaces;
-using GunShopBackPart.Models;
-using GunShopBackPart.Tool;
+﻿using Azure.Core;
+using GunShopBackPart.Interfaces;
 using GunShopBackPart.Mappers;
+using GunShopBackPart.Models;
+using GunShopBackPart.RequestsObjects;
+using GunShopBackPart.Tool;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GunShopBackPart.Controllers
@@ -10,7 +12,7 @@ namespace GunShopBackPart.Controllers
     [Route("api/[controller]")]
     public class ProductController : ControllerBase
     {
-        public IProductServices _repo;
+        private IProductServices _repo;
       
 
         public ProductController(IProductServices repo)
@@ -31,11 +33,32 @@ namespace GunShopBackPart.Controllers
             return Ok(products);
 
         }
+        
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetProductById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
             var product = await _repo.GetByIdAsync(id);
+
+            if (product == null)
+                return NotFound();
+
+ 
             return Ok(product);
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateProduct([FromBody] ProductRequest request)
+        {
+            try
+            {
+                var product = await _repo.CreateProductAsync(request);
+
+                return CreatedAtAction(nameof(GetById), new { id = product.Id }, product.ToProductDTO());
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+
         }
     }
 }

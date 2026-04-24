@@ -18,7 +18,9 @@ namespace GunShopBackPart.DTOs
 
         public string SupplierName { get; set; } = string.Empty;
         public WeaponPermit RequiredPermit { get; set; } = WeaponPermit.None;
+        public string? ImageUrl { get; set; } = string.Empty;
         public abstract ProductType ProductType { get; }
+
 
     }
 }

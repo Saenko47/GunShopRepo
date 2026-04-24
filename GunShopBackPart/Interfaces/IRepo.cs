@@ -1,5 +1,6 @@
 ﻿using GunShopBackPart.DTOs;
 using GunShopBackPart.Tool;
+using System.Linq.Expressions;
 
 namespace GunShopBackPart.Interfaces
 {
@@ -11,6 +12,9 @@ namespace GunShopBackPart.Interfaces
         Task AddAsync(T entity);
         Task DeleteByIdAsync(int id);
 
-        
+        Task<T?> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate);
+
+
+
     }
 }

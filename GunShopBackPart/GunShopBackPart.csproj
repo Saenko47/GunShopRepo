@@ -17,4 +17,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.7" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="img\def\" />
+    <Folder Include="img\uni\" />
+  </ItemGroup>
+
 </Project>

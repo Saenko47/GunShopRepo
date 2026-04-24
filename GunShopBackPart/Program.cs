@@ -1,7 +1,9 @@
 using GunShopBackPart.Data;
 using GunShopBackPart.Interfaces;
+using GunShopBackPart.Mappers;
 using GunShopBackPart.Models;
 using GunShopBackPart.Repository;
+using GunShopBackPart.Tool;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +21,9 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped(typeof(IRepo<>), typeof(Repository<>));
 builder.Services.AddScoped(typeof(IProductServices), typeof(ProductServices));
+builder.Services.AddScoped(typeof(ICustomerServices), typeof(CustomerServices));
+builder.Services.AddScoped(typeof(IRequestHelper), typeof(ProductRequestHelper));
+builder.Services.AddScoped(typeof(IProductFactory), typeof(ProductFactory));
 
 var app = builder.Build();
 

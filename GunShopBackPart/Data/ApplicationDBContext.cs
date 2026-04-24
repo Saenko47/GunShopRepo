@@ -26,6 +26,9 @@ namespace GunShopBackPart.Data
             modelBuilder.Entity<BaseProduct>()
                 .Property(p => p.Price)
                 .HasPrecision(18, 2);
+            modelBuilder.Entity<BaseProduct>()
+    .HasIndex(p => p.Name)
+    .IsUnique();
             modelBuilder.Entity<BaseProduct>().HasIndex(p => p.Name).IsUnique();
             modelBuilder.Entity<BaseProduct>()
                 .HasOne(p => p.Supplier)

@@ -14,6 +14,7 @@ namespace GunShopBackPart.Models
         public Supplier Supplier { get; set; } = null!;
         public WeaponPermit RequiredPermit { get; set; } = WeaponPermit.None;
         public abstract ProductType ProductType { get; }
+        public string ImageUrl { get; set; } = string.Empty;
 
         public List<InventoryItem> InventoryItems { get; set; } = new List<InventoryItem>();
 
