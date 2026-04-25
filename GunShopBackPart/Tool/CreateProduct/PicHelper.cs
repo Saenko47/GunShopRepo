@@ -1,11 +1,21 @@
-﻿namespace GunShopBackPart.Tool
+﻿using Azure.Core;
+using GunShopBackPart.DTOs;
+using GunShopBackPart.Interfaces;
+
+namespace GunShopBackPart.Tool.CreateProduct
 {
-    public static class PicHelper
+    public class PicHelper: IImgageHelper
     {
         public static readonly string IMG_DEF_FOLDER_URL = "img/def/";
         public static readonly string IMG_UNI_FOLDER_URL = "img/uni/";
-
-        public static async Task SavePhotoToFolder(string path, IFormFile image) 
+        
+        public string CreateImageUrl(IFormFile? imageFile, ProductType type) 
+        { 
+        
+            return imageFile != null ? $"{PicHelper.IMG_UNI_FOLDER_URL}{Guid.NewGuid()}.jpg"
+           : $"{PicHelper.IMG_DEF_FOLDER_URL}{type}.jpg";
+        }
+        public async Task SaveImageAsync(IFormFile? image, string path) 
         {
             if (image == null || image.Length == 0)
                 throw new Exception("Файл пустой");

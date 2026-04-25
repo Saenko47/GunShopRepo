@@ -1,8 +1,8 @@
 ﻿using GunShopBackPart.Interfaces;
 using GunShopBackPart.Models;
-using GunShopBackPart.RequestsObjects;
+using GunShopBackPart.RequestsObjects.CreateRequests;
 
-namespace GunShopBackPart.Tool
+namespace GunShopBackPart.Tool.CreateProduct
 {
     public class ProductRequestHelper: IRequestHelper
     {
@@ -14,9 +14,14 @@ namespace GunShopBackPart.Tool
         }
         private async Task<int> GetIdOfSupplierIfHeExist(string supplierName)
         {
-          
-            var existingSupplier = await _supplierRepo.FirstOrDefaultAsync(s => s.Name == supplierName);
-            return existingSupplier?.Id ?? throw new Exception("theres no such supplier");
+
+            var supplier = await _supplierRepo.FirstOrDefaultAsync(
+     s => s.Name.Trim().ToLower() == supplierName.Trim().ToLower()
+ );
+            if (supplier == null)
+                throw new Exception($"Supplier '{supplierName}' not found");
+
+            return supplier?.Id ?? throw new Exception("theres no such supplier");
         }
         private async Task CreateBaseProductFromRequest(BaseProduct product, ProductRequest request)
         {

@@ -1,4 +1,4 @@
-﻿namespace GunShopBackPart.Tool
+﻿namespace GunShopBackPart.Tool.PageCreation
 {
     public class PageQuery
     {

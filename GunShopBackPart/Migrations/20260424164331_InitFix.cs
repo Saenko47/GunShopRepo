@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace GunShopBackPart.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitFix : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -34,8 +34,7 @@ namespace GunShopBackPart.Migrations
                     Login = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     gmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    WeaponPermit = table.Column<int>(type: "int", nullable: false)
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -63,27 +62,100 @@ namespace GunShopBackPart.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BaseProduct",
+                name: "Licenses",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
-                    SupplierId = table.Column<int>(type: "int", nullable: false),
-                    Discriminator = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: false),
-                    Caliber = table.Column<int>(type: "int", nullable: true),
-                    AmountInBox = table.Column<int>(type: "int", nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Gun_Caliber = table.Column<int>(type: "int", nullable: true),
-                    GunType = table.Column<int>(type: "int", nullable: true)
+                    CustomerId = table.Column<int>(type: "int", nullable: false),
+                    PermitType = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BaseProduct", x => x.Id);
+                    table.PrimaryKey("PK_Licenses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BaseProduct_Suppliers_SupplierId",
+                        name: "FK_Licenses_Customers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BaseProducts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    SupplierId = table.Column<int>(type: "int", nullable: true),
+                    RequiredPermit = table.Column<int>(type: "int", nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BaseProducts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BaseProducts_Suppliers_SupplierId",
                         column: x => x.SupplierId,
                         principalTable: "Suppliers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Accessories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Type = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Accessories", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Accessories_BaseProducts_Id",
+                        column: x => x.Id,
+                        principalTable: "BaseProducts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Ammos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Caliber = table.Column<int>(type: "int", nullable: false),
+                    AmountInBox = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Ammos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Ammos_BaseProducts_Id",
+                        column: x => x.Id,
+                        principalTable: "BaseProducts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Guns",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Caliber = table.Column<int>(type: "int", nullable: false),
+                    GunType = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Guns", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Guns_BaseProducts_Id",
+                        column: x => x.Id,
+                        principalTable: "BaseProducts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -103,9 +175,9 @@ namespace GunShopBackPart.Migrations
                 {
                     table.PrimaryKey("PK_Storage", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Storage_BaseProduct_ProductId",
+                        name: "FK_Storage_BaseProducts_ProductId",
                         column: x => x.ProductId,
-                        principalTable: "BaseProduct",
+                        principalTable: "BaseProducts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -138,8 +210,14 @@ namespace GunShopBackPart.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_BaseProduct_SupplierId",
-                table: "BaseProduct",
+                name: "IX_BaseProducts_Name",
+                table: "BaseProducts",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BaseProducts_SupplierId",
+                table: "BaseProducts",
                 column: "SupplierId");
 
             migrationBuilder.CreateIndex(
@@ -153,6 +231,11 @@ namespace GunShopBackPart.Migrations
                 column: "InventoryItemId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Licenses_CustomerId",
+                table: "Licenses",
+                column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Storage_ProductId",
                 table: "Storage",
                 column: "ProductId");
@@ -162,19 +245,31 @@ namespace GunShopBackPart.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Accessories");
+
+            migrationBuilder.DropTable(
                 name: "Admins");
+
+            migrationBuilder.DropTable(
+                name: "Ammos");
 
             migrationBuilder.DropTable(
                 name: "GunPurchases");
 
             migrationBuilder.DropTable(
-                name: "Customers");
+                name: "Guns");
+
+            migrationBuilder.DropTable(
+                name: "Licenses");
 
             migrationBuilder.DropTable(
                 name: "Storage");
 
             migrationBuilder.DropTable(
-                name: "BaseProduct");
+                name: "Customers");
+
+            migrationBuilder.DropTable(
+                name: "BaseProducts");
 
             migrationBuilder.DropTable(
                 name: "Suppliers");

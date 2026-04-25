@@ -1,7 +1,9 @@
 ﻿using GunShopBackPart.DTOs;
 using GunShopBackPart.Models;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.Text.Json.Serialization;
 
-namespace GunShopBackPart.RequestsObjects
+namespace GunShopBackPart.RequestsObjects.CreateRequests
 {
     public abstract class ProductRequest
     {
@@ -14,6 +16,7 @@ namespace GunShopBackPart.RequestsObjects
 
         public IFormFile? Image { get; set; }
 
-        public abstract ProductType ProductType { get; set; }
+        [BindNever]
+        public abstract ProductType ProductType { get;}
     }
 }

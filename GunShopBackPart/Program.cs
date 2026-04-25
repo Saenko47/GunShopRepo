@@ -3,7 +3,7 @@ using GunShopBackPart.Interfaces;
 using GunShopBackPart.Mappers;
 using GunShopBackPart.Models;
 using GunShopBackPart.Repository;
-using GunShopBackPart.Tool;
+using GunShopBackPart.Tool.CreateProduct;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +24,7 @@ builder.Services.AddScoped(typeof(IProductServices), typeof(ProductServices));
 builder.Services.AddScoped(typeof(ICustomerServices), typeof(CustomerServices));
 builder.Services.AddScoped(typeof(IRequestHelper), typeof(ProductRequestHelper));
 builder.Services.AddScoped(typeof(IProductFactory), typeof(ProductFactory));
+builder.Services.AddScoped(typeof(IImgageHelper), typeof(PicHelper));
 
 var app = builder.Build();
 
@@ -40,7 +41,9 @@ using (var scope = app.Services.CreateScope())
         Console.WriteLine("DB failed");
  
 }
-Console.WriteLine(app.Environment.EnvironmentName);
+
+
+    Console.WriteLine(app.Environment.EnvironmentName);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

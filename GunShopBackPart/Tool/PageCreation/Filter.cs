@@ -1,6 +1,6 @@
 ﻿using GunShopBackPart.Models;
 
-namespace GunShopBackPart.Tool
+namespace GunShopBackPart.Tool.PageCreation
 {
     public class Filter
     {

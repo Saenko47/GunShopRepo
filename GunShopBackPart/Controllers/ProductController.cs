@@ -2,8 +2,8 @@
 using GunShopBackPart.Interfaces;
 using GunShopBackPart.Mappers;
 using GunShopBackPart.Models;
-using GunShopBackPart.RequestsObjects;
-using GunShopBackPart.Tool;
+using GunShopBackPart.RequestsObjects.CreateRequests;
+using GunShopBackPart.Tool.PageCreation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GunShopBackPart.Controllers
@@ -45,8 +45,40 @@ namespace GunShopBackPart.Controllers
  
             return Ok(product);
         }
-        [HttpPost]
-        public async Task<IActionResult> CreateProduct([FromBody] ProductRequest request)
+      
+        [HttpPost("gun")]
+        public async Task<IActionResult> CreateProductGun([FromForm] GunRequest request)
+        {
+            try
+            {
+                var product = await _repo.CreateProductAsync(request);
+
+                return CreatedAtAction(nameof(GetById), new { id = product.Id }, product.ToProductDTO());
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+
+        }
+         
+        [HttpPost("ammo")]
+        public async Task<IActionResult> CreateProductAmmo([FromForm] AmmoRequest request)
+        {
+            try
+            {
+                var product = await _repo.CreateProductAsync(request);
+
+                return CreatedAtAction(nameof(GetById), new { id = product.Id }, product.ToProductDTO());
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+
+        }
+        [HttpPost("accessory")]
+        public async Task<IActionResult> CreateProductAccessory([FromForm] AccessorieRequest request)
         {
             try
             {

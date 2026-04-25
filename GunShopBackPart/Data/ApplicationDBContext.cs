@@ -9,7 +9,7 @@ namespace GunShopBackPart.Data
         public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options) : base(options)
         {
         }
-
+        public DbSet<BaseProduct> BaseProducts { get; set; }
         public DbSet<Gun> Guns { get; set; }
         public DbSet<Customer> Customers { get; set; }
          
@@ -23,18 +23,17 @@ namespace GunShopBackPart.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            
             modelBuilder.Entity<BaseProduct>()
                 .Property(p => p.Price)
                 .HasPrecision(18, 2);
-            modelBuilder.Entity<BaseProduct>()
-    .HasIndex(p => p.Name)
-    .IsUnique();
             modelBuilder.Entity<BaseProduct>().HasIndex(p => p.Name).IsUnique();
+
             modelBuilder.Entity<BaseProduct>()
                 .HasOne(p => p.Supplier)
                 .WithMany(s => s.Products)
                 .HasForeignKey(p => p.SupplierId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<ProductPurchase>()
                 .HasOne(pp => pp.Customer)
@@ -80,11 +79,11 @@ namespace GunShopBackPart.Data
             modelBuilder.Entity<Supplier>()
                 .HasIndex(s => s.Id).IsUnique();
             modelBuilder.Entity<Supplier>()
-                .HasIndex(s => s.Name).IsUnique();
+    .Property(x => x.CreatedAt)
+    .HasDefaultValueSql("GETUTCDATE()");
             modelBuilder.Entity<Supplier>()
-                .HasMany(s => s.Products)
-                .WithOne(p => p.Supplier)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasIndex(s => s.Name).IsUnique();
+
 
 
 

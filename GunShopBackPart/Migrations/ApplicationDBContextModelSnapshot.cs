@@ -17,7 +17,7 @@ namespace GunShopBackPart.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.5")
+                .HasAnnotation("ProductVersion", "10.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -32,13 +32,19 @@ namespace GunShopBackPart.Migrations
 
                     b.Property<string>("Login")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Id")
+                        .IsUnique();
+
+                    b.HasIndex("Login")
+                        .IsUnique();
 
                     b.ToTable("Admins");
                 });
@@ -55,18 +61,28 @@ namespace GunShopBackPart.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<decimal>("Price")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("SupplierId")
+                    b.Property<int>("RequiredPermit")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SupplierId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.HasIndex("SupplierId");
 
@@ -85,7 +101,7 @@ namespace GunShopBackPart.Migrations
 
                     b.Property<string>("Login")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -93,16 +109,25 @@ namespace GunShopBackPart.Migrations
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("WeaponPermit")
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("gmail")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Id")
+                        .IsUnique();
+
+                    b.HasIndex("Login")
+                        .IsUnique();
+
+                    b.HasIndex("PhoneNumber")
+                        .IsUnique();
+
+                    b.HasIndex("gmail")
+                        .IsUnique();
 
                     b.ToTable("Customers");
                 });
@@ -134,6 +159,30 @@ namespace GunShopBackPart.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("Storage");
+                });
+
+            modelBuilder.Entity("GunShopBackPart.Models.Licens", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PermitType")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("Id")
+                        .IsUnique();
+
+                    b.ToTable("Licenses");
                 });
 
             modelBuilder.Entity("GunShopBackPart.Models.ProductPurchase", b =>
@@ -174,7 +223,9 @@ namespace GunShopBackPart.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
@@ -184,7 +235,7 @@ namespace GunShopBackPart.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");
@@ -196,6 +247,12 @@ namespace GunShopBackPart.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Id")
+                        .IsUnique();
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Suppliers");
                 });
@@ -221,58 +278,6 @@ namespace GunShopBackPart.Migrations
                         .HasColumnType("int");
 
                     b.ToTable("Ammos", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 6,
-                            Description = "50 rounds",
-                            Name = "9mm Ammo Box",
-                            Price = 20m,
-                            SupplierId = 1,
-                            AmountInBox = 50,
-                            Caliber = 0
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Description = "50 rounds",
-                            Name = ".45 ACP Ammo",
-                            Price = 25m,
-                            SupplierId = 2,
-                            AmountInBox = 50,
-                            Caliber = 1
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Description = "30 rounds",
-                            Name = "5.56 Ammo",
-                            Price = 18m,
-                            SupplierId = 3,
-                            AmountInBox = 30,
-                            Caliber = 2
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Description = "30 rounds",
-                            Name = "7.62 Ammo",
-                            Price = 22m,
-                            SupplierId = 4,
-                            AmountInBox = 30,
-                            Caliber = 3
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Description = "25 shells",
-                            Name = "12 Gauge Shells",
-                            Price = 15m,
-                            SupplierId = 5,
-                            AmountInBox = 25,
-                            Caliber = 4
-                        });
                 });
 
             modelBuilder.Entity("GunShopBackPart.Models.Gun", b =>
@@ -286,58 +291,6 @@ namespace GunShopBackPart.Migrations
                         .HasColumnType("int");
 
                     b.ToTable("Guns", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "9mm pistol",
-                            Name = "Glock 17",
-                            Price = 500m,
-                            SupplierId = 1,
-                            Caliber = 0,
-                            GunType = 0
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = ".45 ACP pistol",
-                            Name = "Colt 1911",
-                            Price = 700m,
-                            SupplierId = 2,
-                            Caliber = 1,
-                            GunType = 0
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Description = "5.56 rifle",
-                            Name = "AR-15",
-                            Price = 1200m,
-                            SupplierId = 3,
-                            Caliber = 2,
-                            GunType = 1
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Description = "7.62 rifle",
-                            Name = "AK-47",
-                            Price = 1100m,
-                            SupplierId = 4,
-                            Caliber = 3,
-                            GunType = 1
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Description = "12 gauge shotgun",
-                            Name = "Remington 870",
-                            Price = 400m,
-                            SupplierId = 5,
-                            Caliber = 4,
-                            GunType = 2
-                        });
                 });
 
             modelBuilder.Entity("GunShopBackPart.Models.BaseProduct", b =>
@@ -345,8 +298,7 @@ namespace GunShopBackPart.Migrations
                     b.HasOne("GunShopBackPart.Models.Supplier", "Supplier")
                         .WithMany("Products")
                         .HasForeignKey("SupplierId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Supplier");
                 });
@@ -354,12 +306,23 @@ namespace GunShopBackPart.Migrations
             modelBuilder.Entity("GunShopBackPart.Models.InventoryItem", b =>
                 {
                     b.HasOne("GunShopBackPart.Models.BaseProduct", "Product")
-                        .WithMany()
+                        .WithMany("InventoryItems")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("GunShopBackPart.Models.Licens", b =>
+                {
+                    b.HasOne("GunShopBackPart.Models.Customer", "Customer")
+                        .WithMany("Licenses")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("GunShopBackPart.Models.ProductPurchase", b =>
@@ -408,9 +371,16 @@ namespace GunShopBackPart.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("GunShopBackPart.Models.BaseProduct", b =>
+                {
+                    b.Navigation("InventoryItems");
+                });
+
             modelBuilder.Entity("GunShopBackPart.Models.Customer", b =>
                 {
                     b.Navigation("GunPurchases");
+
+                    b.Navigation("Licenses");
                 });
 
             modelBuilder.Entity("GunShopBackPart.Models.Supplier", b =>

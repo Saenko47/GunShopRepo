@@ -4,33 +4,36 @@ using GunShopBackPart.DTOs;
 using GunShopBackPart.Interfaces;
 using GunShopBackPart.Mappers;
 using GunShopBackPart.Models;
-using GunShopBackPart.RequestsObjects;
-using GunShopBackPart.Tool;
+using GunShopBackPart.RequestsObjects.CreateRequests;
 using Microsoft.EntityFrameworkCore;
+using GunShopBackPart.RequestsObjects.UpdateRequests;
+using GunShopBackPart.Tool.PageCreation;
 
 namespace GunShopBackPart.Repository
 {
-    
-    public class ProductServices: IProductServices
+
+    public class ProductServices : IProductServices
     {
         private readonly ApplicationDBContext context;
         private readonly DbSet<BaseProduct> set;
         private readonly IProductFactory _productFactory;
+        private readonly IImgageHelper img;
 
 
-        
-        
-        public ProductServices(ApplicationDBContext context, IProductFactory productFactory)    
+
+
+        public ProductServices(ApplicationDBContext context, IProductFactory productFactory, IImgageHelper img)
         {
             this.context = context;
             this._productFactory = productFactory;
+            this.img = img;
             set = context.Set<BaseProduct>();
         }
         public async Task<ProductDTO?> GetByIdAsync(int id)
         {
             var res = await set
     .Include(x => x.Supplier)
-    .Include(i => i.InventoryItems) 
+    .Include(i => i.InventoryItems)
     .FirstOrDefaultAsync(x => x.Id == id);
             return res?.ToProductDTO();
         }
@@ -77,25 +80,11 @@ namespace GunShopBackPart.Repository
 
 
         }
-        //public async Task<BaseProduct> GetOrCreateProductAsync(ProductRequest product)
-        //{
-        //    var newProduct = await _productFactory.CreateAsync(product);
+       
 
-        //    try
-        //    {
-        //        set.Add(newProduct);
-        //        await context.SaveChangesAsync();
-        //        return newProduct;
-        //    }
-        //    catch (DbUpdateException)
-        //    {
-        //        return await set.FirstAsync(p => p.Name == product.Name);
-        //    }
-        //}
-
-        public async Task<BaseProduct> FindProductByName(string name)
+        public async Task<BaseProduct?> FindProductByName(string name)
         {
-            return await set.FirstAsync(p => p.Name == name);
+            return await set.FirstOrDefaultAsync(p => p.Name == name);
         }
         public async Task AddInventoryItemAsyncById(BaseProduct product)
         {
@@ -119,13 +108,7 @@ namespace GunShopBackPart.Repository
 
             context.Storage.Add(item);
         }
-        //public async Task<BaseProduct> CreateProductAsync(ProductRequest product)
-        //{
-        //    var dbProduct = await GetOrCreateProductAsync(product);
-        //    await AddInventoryItemAsyncById(dbProduct);
-        //    await context.SaveChangesAsync();
-        //    return dbProduct;
-        //}
+       
         public async Task<BaseProduct> CreateProductAsync(ProductRequest request)
         {
             using var transaction = await context.Database.BeginTransactionAsync();
@@ -134,30 +117,39 @@ namespace GunShopBackPart.Repository
             if (exist != null)
             {
                 await AddInventoryItemAsyncById(exist);
+                await context.SaveChangesAsync();
+                await transaction.CommitAsync();
                 return exist;
             }
 
             var product = await _productFactory.CreateAsync(request);
-       
+            string imgUrl = img.CreateImageUrl(request.Image, request.ProductType);
+            if (request.Image != null) 
+            {
+             
+                await img.SaveImageAsync(request.Image, imgUrl);
+
+            }
+          
+
+            product.ImageUrl = imgUrl;
+
             set.Add(product);
+           
+
             await AddInventoryItemAsyncByNP(product);
-
-            await context.SaveChangesAsync();
-
-            product.ImageUrl = request.Image != null? $"{PicHelper.IMG_UNI_FOLDER_URL}{product.Id}.jpg" 
-                : $"{PicHelper.IMG_DEF_FOLDER_URL}{product.ProductType}.jpg";
 
             await context.SaveChangesAsync();
             await transaction.CommitAsync();
 
-            if(request.Image != null) await PicHelper.SavePhotoToFolder(product.ImageUrl, request.Image);
+           
 
             return product;
         }
-        
 
 
-      public async Task DeleteProductAsync(int id)
+
+        public async Task DeleteProductAsync(int id)
         {
             var product = await set.FindAsync(id);
             if (product != null)
@@ -166,10 +158,10 @@ namespace GunShopBackPart.Repository
                 await context.SaveChangesAsync();
             }
         }
-        public async Task<ProductDTO> UpdateProductAsync(int id, ProductDTO request)
+        public async Task UpdateProductAsync(UpdateProductRequest request)
         {
-
-            return null;
+            return;
+           
         }
 
     }

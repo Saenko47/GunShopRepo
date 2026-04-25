@@ -1,7 +1,8 @@
 ﻿using GunShopBackPart.DTOs;
 using GunShopBackPart.Models;
-using GunShopBackPart.RequestsObjects;
-using GunShopBackPart.Tool;
+using GunShopBackPart.RequestsObjects.CreateRequests;
+using GunShopBackPart.RequestsObjects.UpdateRequests;
+using GunShopBackPart.Tool.PageCreation;
 
 namespace GunShopBackPart.Interfaces
 {
@@ -11,7 +12,7 @@ namespace GunShopBackPart.Interfaces
         Task<List<ProductDTO>> GetObjectsByPages(PageQuery pq, Filter filter);
 
         Task<BaseProduct> CreateProductAsync(ProductRequest productDTO);
-         Task<ProductDTO?> UpdateProductAsync(int id, ProductDTO productDTO);
+         Task UpdateProductAsync(UpdateProductRequest p);
          Task DeleteProductAsync(int id);
     }
 }

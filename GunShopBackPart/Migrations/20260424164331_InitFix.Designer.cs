@@ -12,15 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GunShopBackPart.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20260412140049_ThirsdTry")]
-    partial class ThirsdTry
+    [Migration("20260424164331_InitFix")]
+    partial class InitFix
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.5")
+                .HasAnnotation("ProductVersion", "10.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -58,18 +58,28 @@ namespace GunShopBackPart.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<decimal>("Price")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("SupplierId")
+                    b.Property<int>("RequiredPermit")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SupplierId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.HasIndex("SupplierId");
 
@@ -97,9 +107,6 @@ namespace GunShopBackPart.Migrations
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("WeaponPermit")
-                        .HasColumnType("int");
 
                     b.Property<string>("gmail")
                         .IsRequired()
@@ -137,6 +144,27 @@ namespace GunShopBackPart.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("Storage");
+                });
+
+            modelBuilder.Entity("GunShopBackPart.Models.Licens", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PermitType")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("Licenses");
                 });
 
             modelBuilder.Entity("GunShopBackPart.Models.ProductPurchase", b =>
@@ -243,9 +271,7 @@ namespace GunShopBackPart.Migrations
                 {
                     b.HasOne("GunShopBackPart.Models.Supplier", "Supplier")
                         .WithMany("Products")
-                        .HasForeignKey("SupplierId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SupplierId");
 
                     b.Navigation("Supplier");
                 });
@@ -253,12 +279,23 @@ namespace GunShopBackPart.Migrations
             modelBuilder.Entity("GunShopBackPart.Models.InventoryItem", b =>
                 {
                     b.HasOne("GunShopBackPart.Models.BaseProduct", "Product")
-                        .WithMany()
+                        .WithMany("InventoryItems")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("GunShopBackPart.Models.Licens", b =>
+                {
+                    b.HasOne("GunShopBackPart.Models.Customer", "Customer")
+                        .WithMany("Licenses")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("GunShopBackPart.Models.ProductPurchase", b =>
@@ -307,9 +344,16 @@ namespace GunShopBackPart.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("GunShopBackPart.Models.BaseProduct", b =>
+                {
+                    b.Navigation("InventoryItems");
+                });
+
             modelBuilder.Entity("GunShopBackPart.Models.Customer", b =>
                 {
                     b.Navigation("GunPurchases");
+
+                    b.Navigation("Licenses");
                 });
 
             modelBuilder.Entity("GunShopBackPart.Models.Supplier", b =>
