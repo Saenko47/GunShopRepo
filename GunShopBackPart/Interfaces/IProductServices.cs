@@ -12,7 +12,7 @@ namespace GunShopBackPart.Interfaces
         Task<List<ProductDTO>> GetObjectsByPages(PageQuery pq, Filter filter);
 
         Task<BaseProduct> CreateProductAsync(ProductRequest productDTO);
-         Task UpdateProductAsync(UpdateProductRequest p);
+        Task<BaseProduct> UpdateProductAsync(UpdateProductRequest p);
          Task DeleteProductAsync(int id);
     }
 }

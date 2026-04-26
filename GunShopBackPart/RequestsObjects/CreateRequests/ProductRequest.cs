@@ -5,6 +5,10 @@ using System.Text.Json.Serialization;
 
 namespace GunShopBackPart.RequestsObjects.CreateRequests
 {
+    [JsonPolymorphic(TypeDiscriminatorPropertyName = "productType")]
+    [JsonDerivedType(typeof(GunRequest), "gun")]
+    [JsonDerivedType(typeof(AmmoRequest), "ammo")]
+    [JsonDerivedType(typeof(AccessorieRequest), "accessory")]
     public abstract class ProductRequest
     {
         public string Name { get; set; } = string.Empty;

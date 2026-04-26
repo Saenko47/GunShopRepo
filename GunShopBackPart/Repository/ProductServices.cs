@@ -18,15 +18,17 @@ namespace GunShopBackPart.Repository
         private readonly DbSet<BaseProduct> set;
         private readonly IProductFactory _productFactory;
         private readonly IImgageHelper img;
+        private readonly IHandleProductUpdate handleProductUpdate;
 
 
 
 
-        public ProductServices(ApplicationDBContext context, IProductFactory productFactory, IImgageHelper img)
+        public ProductServices(ApplicationDBContext context, IProductFactory productFactory, IImgageHelper img, IHandleProductUpdate handleProductUpdate)
         {
             this.context = context;
             this._productFactory = productFactory;
             this.img = img;
+            this.handleProductUpdate = handleProductUpdate;
             set = context.Set<BaseProduct>();
         }
         public async Task<ProductDTO?> GetByIdAsync(int id)
@@ -158,10 +160,19 @@ namespace GunShopBackPart.Repository
                 await context.SaveChangesAsync();
             }
         }
-        public async Task UpdateProductAsync(UpdateProductRequest request)
+        public async Task<BaseProduct> UpdateProductAsync(UpdateProductRequest request)
         {
-            return;
-           
+            var product = await set.FindAsync(request.Id);
+
+            if (product == null)
+                throw new Exception("Product not found");
+
+            await handleProductUpdate.Handle(request, product);
+
+            await context.SaveChangesAsync();
+
+            return product;
+
         }
 
     }

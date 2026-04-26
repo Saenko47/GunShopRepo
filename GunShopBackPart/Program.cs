@@ -4,6 +4,7 @@ using GunShopBackPart.Mappers;
 using GunShopBackPart.Models;
 using GunShopBackPart.Repository;
 using GunShopBackPart.Tool.CreateProduct;
+using GunShopBackPart.Tool.Update;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,6 +26,8 @@ builder.Services.AddScoped(typeof(ICustomerServices), typeof(CustomerServices));
 builder.Services.AddScoped(typeof(IRequestHelper), typeof(ProductRequestHelper));
 builder.Services.AddScoped(typeof(IProductFactory), typeof(ProductFactory));
 builder.Services.AddScoped(typeof(IImgageHelper), typeof(PicHelper));
+builder.Services.AddScoped(typeof(IHandleProductUpdate), typeof(HandleProductUpdate));
+builder.Services.AddScoped(typeof(IUpdateProductHelper), typeof(UpdateProductHelper));
 
 var app = builder.Build();
 

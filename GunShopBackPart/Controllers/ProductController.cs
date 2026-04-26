@@ -3,6 +3,7 @@ using GunShopBackPart.Interfaces;
 using GunShopBackPart.Mappers;
 using GunShopBackPart.Models;
 using GunShopBackPart.RequestsObjects.CreateRequests;
+using GunShopBackPart.RequestsObjects.UpdateRequests;
 using GunShopBackPart.Tool.PageCreation;
 using Microsoft.AspNetCore.Mvc;
 
@@ -92,5 +93,45 @@ namespace GunShopBackPart.Controllers
             }
 
         }
+        [HttpPut("gun")]
+        public async Task<IActionResult> UpdateProductGun([FromForm] UpdateGunRequest request)
+        {
+            try
+            {
+                var product = await _repo.UpdateProductAsync(request);
+                return Ok(product.ToProductDTO());
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+        [HttpPut("ammo")]
+        public async Task<IActionResult> UpdateProductAmmo([FromForm] UpdateAmmoRequest request)
+        {
+            try
+            {
+                var product = await _repo.UpdateProductAsync(request);
+                return Ok(product.ToProductDTO());
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+        [HttpPut("accessory")]
+        public async Task<IActionResult> UpdateProductAccessory([FromForm] UpdateAccessorieRequest request)
+        {
+            try
+            {
+                var product = await _repo.UpdateProductAsync(request);
+                return Ok(product.ToProductDTO());
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
     }
 }

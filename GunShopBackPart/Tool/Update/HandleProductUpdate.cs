@@ -1,12 +1,13 @@
-﻿using GunShopBackPart.Models;
+﻿using GunShopBackPart.Interfaces;
+using GunShopBackPart.Models;
 using GunShopBackPart.RequestsObjects.UpdateRequests;
 
 namespace GunShopBackPart.Tool.Update
 {
-    public class HandleProductUpdate
+    public class HandleProductUpdate: IHandleProductUpdate
     {
-        private readonly UpdateProductHelper _updateHelper;
-        public HandleProductUpdate(UpdateProductHelper updateHelper)
+        private readonly IUpdateProductHelper _updateHelper;
+        public HandleProductUpdate(IUpdateProductHelper updateHelper)
         {
             _updateHelper = updateHelper;
         }
