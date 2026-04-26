@@ -1,5 +1,7 @@
 ﻿using GunShopBackPart.Interfaces;
 using GunShopBackPart.Models;
+using GunShopBackPart.RequestsObjects.CreateRequests.CustomerCreateRequests;
+using GunShopBackPart.RequestsObjects.UpdateRequests.CustomerUpdate;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GunShopBackPart.Controllers
@@ -30,6 +32,24 @@ namespace GunShopBackPart.Controllers
         {
             var hasLicense = await customerServices.IsCustomerHasLicenseAsync(id, licenseType);
             return Ok(hasLicense);
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateCustomer([FromForm] CreateCustomerRequest customer)
+        {
+            await customerServices.CreateCustomerAsync(customer);
+            return Ok();
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCustomer(int id)
+        {
+            await customerServices.DeleteCustomerAsync(id);
+            return Ok();
+        }
+        [HttpPut]
+        public async Task<IActionResult> UpdateCustomer([FromForm] CustomerUpdateRequest customer)
+        {
+            await customerServices.UpdateCustomerAsync(customer);
+            return Ok();
         }
     }
 }

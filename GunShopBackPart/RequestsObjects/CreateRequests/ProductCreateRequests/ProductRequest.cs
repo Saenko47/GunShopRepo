@@ -3,7 +3,7 @@ using GunShopBackPart.Models;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Text.Json.Serialization;
 
-namespace GunShopBackPart.RequestsObjects.CreateRequests
+namespace GunShopBackPart.RequestsObjects.CreateRequests.ProductCreateRequests
 {
     [JsonPolymorphic(TypeDiscriminatorPropertyName = "productType")]
     [JsonDerivedType(typeof(GunRequest), "gun")]

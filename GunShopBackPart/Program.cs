@@ -4,6 +4,7 @@ using GunShopBackPart.Mappers;
 using GunShopBackPart.Models;
 using GunShopBackPart.Repository;
 using GunShopBackPart.Tool.CreateProduct;
+using GunShopBackPart.Tool.Crypto;
 using GunShopBackPart.Tool.Update;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,6 +29,7 @@ builder.Services.AddScoped(typeof(IProductFactory), typeof(ProductFactory));
 builder.Services.AddScoped(typeof(IImgageHelper), typeof(PicHelper));
 builder.Services.AddScoped(typeof(IHandleProductUpdate), typeof(HandleProductUpdate));
 builder.Services.AddScoped(typeof(IUpdateProductHelper), typeof(UpdateProductHelper));
+builder.Services.AddScoped(typeof(ICrypto), typeof(Crypto));
 
 var app = builder.Build();
 

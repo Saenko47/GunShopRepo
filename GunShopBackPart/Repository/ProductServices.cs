@@ -4,10 +4,10 @@ using GunShopBackPart.DTOs;
 using GunShopBackPart.Interfaces;
 using GunShopBackPart.Mappers;
 using GunShopBackPart.Models;
-using GunShopBackPart.RequestsObjects.CreateRequests;
 using Microsoft.EntityFrameworkCore;
-using GunShopBackPart.RequestsObjects.UpdateRequests;
 using GunShopBackPart.Tool.PageCreation;
+using GunShopBackPart.RequestsObjects.CreateRequests.ProductCreateRequests;
+using GunShopBackPart.RequestsObjects.UpdateRequests.ProductUpdates;
 
 namespace GunShopBackPart.Repository
 {

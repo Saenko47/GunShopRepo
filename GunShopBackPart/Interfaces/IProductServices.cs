@@ -1,7 +1,7 @@
 ﻿using GunShopBackPart.DTOs;
 using GunShopBackPart.Models;
-using GunShopBackPart.RequestsObjects.CreateRequests;
-using GunShopBackPart.RequestsObjects.UpdateRequests;
+using GunShopBackPart.RequestsObjects.CreateRequests.ProductCreateRequests;
+using GunShopBackPart.RequestsObjects.UpdateRequests.ProductUpdates;
 using GunShopBackPart.Tool.PageCreation;
 
 namespace GunShopBackPart.Interfaces

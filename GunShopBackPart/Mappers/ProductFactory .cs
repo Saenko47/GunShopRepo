@@ -1,6 +1,6 @@
 ﻿using GunShopBackPart.Interfaces;
 using GunShopBackPart.Models;
-using GunShopBackPart.RequestsObjects.CreateRequests;
+using GunShopBackPart.RequestsObjects.CreateRequests.ProductCreateRequests;
 
 namespace GunShopBackPart.Mappers
 {

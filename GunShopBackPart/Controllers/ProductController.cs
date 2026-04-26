@@ -2,8 +2,8 @@
 using GunShopBackPart.Interfaces;
 using GunShopBackPart.Mappers;
 using GunShopBackPart.Models;
-using GunShopBackPart.RequestsObjects.CreateRequests;
-using GunShopBackPart.RequestsObjects.UpdateRequests;
+using GunShopBackPart.RequestsObjects.CreateRequests.ProductCreateRequests;
+using GunShopBackPart.RequestsObjects.UpdateRequests.ProductUpdates;
 using GunShopBackPart.Tool.PageCreation;
 using Microsoft.AspNetCore.Mvc;
 
@@ -132,6 +132,18 @@ namespace GunShopBackPart.Controllers
                 return NotFound(ex.Message);
             }
         }
-
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteProduct(int id)
+        {
+            try
+            {
+                await _repo.DeleteProductAsync(id);
+                return NoContent();
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
     }
 }

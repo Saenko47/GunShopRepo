@@ -1,7 +1,7 @@
 ﻿using GunShopBackPart.DTOs;
 using GunShopBackPart.Models;
 
-namespace GunShopBackPart.RequestsObjects.UpdateRequests
+namespace GunShopBackPart.RequestsObjects.UpdateRequests.ProductUpdates
 {
     public class UpdateGunRequest: UpdateProductRequest
     {

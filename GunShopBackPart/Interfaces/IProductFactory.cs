@@ -1,5 +1,5 @@
 ﻿using GunShopBackPart.Models;
-using GunShopBackPart.RequestsObjects.CreateRequests;
+using GunShopBackPart.RequestsObjects.CreateRequests.ProductCreateRequests;
 
 namespace GunShopBackPart.Interfaces
 {

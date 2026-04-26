@@ -2,7 +2,7 @@
 using GunShopBackPart.Models;
 using System.Text.Json.Serialization;
 
-namespace GunShopBackPart.RequestsObjects.CreateRequests
+namespace GunShopBackPart.RequestsObjects.CreateRequests.ProductCreateRequests
 {
     public class AccessorieRequest: ProductRequest
     {

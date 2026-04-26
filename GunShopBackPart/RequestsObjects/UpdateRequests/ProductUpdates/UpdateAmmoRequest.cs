@@ -1,6 +1,6 @@
 ﻿using GunShopBackPart.Models;
 
-namespace GunShopBackPart.RequestsObjects.UpdateRequests
+namespace GunShopBackPart.RequestsObjects.UpdateRequests.ProductUpdates
 {
     public class UpdateAmmoRequest: UpdateProductRequest
     {

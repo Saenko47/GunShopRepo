@@ -1,6 +1,7 @@
 ﻿using GunShopBackPart.Interfaces;
 using GunShopBackPart.Models;
-using GunShopBackPart.RequestsObjects.UpdateRequests;
+using GunShopBackPart.RequestsObjects.UpdateRequests.ProductUpdates;
+using Microsoft.AspNetCore.Mvc;
 
 namespace GunShopBackPart.Tool.Update
 {
@@ -60,5 +61,6 @@ namespace GunShopBackPart.Tool.Update
                 accessorie.Type = request.Type.Value;
             return accessorie;
         }
+    
     }
 }
