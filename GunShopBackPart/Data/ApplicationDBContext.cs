@@ -1,6 +1,7 @@
 ﻿using GunShopBackPart.Models;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 
 namespace GunShopBackPart.Data
 {
@@ -39,7 +40,16 @@ namespace GunShopBackPart.Data
                 .HasOne(pp => pp.Customer)
                 .WithMany(c => c.GunPurchases)
                 .HasForeignKey(pp => pp.CustomerId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<ProductPurchase>()
+                .HasIndex(p => p.InventoryItemId)
+                .IsUnique();
+
+            modelBuilder.Entity<InventoryItem>()
+                .HasIndex(ii => ii.Id).IsUnique();
+            modelBuilder.Entity<InventoryItem>()
+                .HasIndex(ii => ii.SerialNumber).IsUnique();
+
 
             modelBuilder.Entity<InventoryItem>()
                 .HasOne(ii => ii.Product)
@@ -65,11 +75,13 @@ namespace GunShopBackPart.Data
 
             modelBuilder.Entity<Licens>()
                 .HasIndex(l => l.Id).IsUnique();
+
             modelBuilder.Entity<Licens>()
                 .HasOne(l => l.Customer)
                 .WithMany(c => c.Licenses)
                 .HasForeignKey(l => l.CustomerId)
                 .OnDelete(DeleteBehavior.Cascade);
+
 
             modelBuilder.Entity<Admin>()
                 .HasIndex(a => a.Id).IsUnique();

@@ -14,9 +14,11 @@
         public string Password { get; set; } = string.Empty;
         public string gmail { get; set; } = string.Empty;
         public string PhoneNumber { get; set; } = string.Empty;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime? UpdatedAt { get; set; } = null;
 
 
-         public List<ProductPurchase> GunPurchases { get; set; } = new List<ProductPurchase>();
+        public List<ProductPurchase> GunPurchases { get; set; } = new List<ProductPurchase>();
         public List<Licens> Licenses { get; set; } = new List<Licens>();
 
     }

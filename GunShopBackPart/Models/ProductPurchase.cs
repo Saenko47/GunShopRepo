@@ -7,6 +7,7 @@
         public Customer Customer { get; set; } = null!;
         public int InventoryItemId { get; set; }
         public InventoryItem InventoryItem { get; set; } = null!;
+        public DateTime PurchaseAt { get; set; } = DateTime.UtcNow;
 
 
         public DateTime PurchaseDate { get; set; } = DateTime.Now;

@@ -11,5 +11,9 @@ namespace GunShopBackPart.Models
 
         public string Location { get; set; } = string.Empty; // Physical location of the storage
         public bool isSold { get; set; } = false; // Indicates whether the item has been sold
+        
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow; // Timestamp for when the item was added to inventory
+
+        public DateTime? SoldAt { get; set; } = null; // Timestamp for when the item was sold, if applicable
     }
 }
