@@ -1,5 +1,6 @@
 ﻿using GunShopBackPart.DTOs;
 using GunShopBackPart.Models;
+using GunShopBackPart.RequestsObjects.RequestPurchase;
 
 namespace GunShopBackPart.Interfaces
 {
@@ -7,6 +8,6 @@ namespace GunShopBackPart.Interfaces
     {
         Task<List<ProductPurchase>?> GetAllPurchaseOfCustomerAsync(int customerId);
 
-        Task Purchase(int customerId, int productId);
+        Task Purchase(PurchaseRequest request);
     }
 }

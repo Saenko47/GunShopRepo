@@ -30,6 +30,7 @@ builder.Services.AddScoped(typeof(IImgageHelper), typeof(PicHelper));
 builder.Services.AddScoped(typeof(IHandleProductUpdate), typeof(HandleProductUpdate));
 builder.Services.AddScoped(typeof(IUpdateProductHelper), typeof(UpdateProductHelper));
 builder.Services.AddScoped(typeof(ICrypto), typeof(Crypto));
+builder.Services.AddScoped(typeof(IProductPurchaseRepo), typeof(ProductPurchaseRepo));
 
 var app = builder.Build();
 

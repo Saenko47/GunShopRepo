@@ -2,6 +2,7 @@
 using GunShopBackPart.DTOs;
 using GunShopBackPart.Interfaces;
 using GunShopBackPart.Models;
+using GunShopBackPart.RequestsObjects.RequestPurchase;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +14,12 @@ namespace GunShopBackPart.Repository
     {
         private readonly ApplicationDBContext _context;
         private readonly DbSet<ProductPurchase> set;
+        private readonly ICustomerServices _customerServices;
 
-        public ProductPurchaseRepo(ApplicationDBContext context)
+        public ProductPurchaseRepo(ApplicationDBContext context, ICustomerServices customerServices)
         {
             _context = context;
+            _customerServices = customerServices;
             set = context.Set<ProductPurchase>();
         }
 
@@ -40,13 +43,18 @@ namespace GunShopBackPart.Repository
             }
             return product;
         }
-        public async Task Purchase(int customerId, int productId)
+        public async Task Purchase(PurchaseRequest request)
         {
-            var inventoryItem = await FindProductById(productId);
+            if(!await _customerServices.IsCustomerHasLicenseAsync(request.CustomerId, request.LicenseType))
+            {
+                throw new InvalidOperationException("Customer does not have the required license.");
+            }
+
+            var inventoryItem = await FindProductById(request.Id);
 
             ProductPurchase purchase = new ProductPurchase
             {
-                CustomerId = customerId,
+                CustomerId = request.CustomerId,
                 InventoryItemId = inventoryItem.Id,
                 PurchaseDate = DateTime.Now 
             };

@@ -31,7 +31,7 @@ namespace GunShopBackPart.Repository
         {
             return await set
          .AnyAsync(c => c.Id == customerId &&
-                        c.Licenses.Any(l => l.PermitType == licenseType));
+                        c.Licenses.Any(l => l.PermitType == licenseType && l.ExpirationDate > DateTime.Now)) ;
         }
         public async Task CreateCustomerAsync(CreateCustomerRequest customer)
         {
