@@ -12,11 +12,13 @@ namespace GunShopBackPart.Repository
         private readonly ApplicationDBContext context;
         private readonly DbSet<Customer> set;
         private readonly ICrypto crypto;
+        private readonly IJVTProvider jvtProvider;
 
-        public CustomerServices(ApplicationDBContext context, ICrypto crypto)
+        public CustomerServices(ApplicationDBContext context, ICrypto crypto, IJVTProvider jvtProvider)
         {
             this.context = context;
             this.crypto = crypto;
+            this.jvtProvider = jvtProvider;
             set = context.Set<Customer>();
         }
 
@@ -31,11 +33,11 @@ namespace GunShopBackPart.Repository
         {
             return await set
          .AnyAsync(c => c.Id == customerId &&
-                        c.Licenses.Any(l => l.PermitType == licenseType && l.ExpirationDate > DateTime.Now)) ;
+                        c.Licenses.Any(l => l.PermitType == licenseType && l.ExpirationDate > DateTime.Now));
         }
         public async Task CreateCustomerAsync(CreateCustomerRequest customer)
         {
-            if(await set.AnyAsync(c => c.Login == customer.Login))
+            if (await set.AnyAsync(c => c.Login == customer.Login))
                 throw new Exception("Customer with this login already exists");
 
             var newCustomer = new Customer
@@ -66,12 +68,12 @@ namespace GunShopBackPart.Repository
         public async Task UpdateCustomerAsync(CustomerUpdateRequest updatedCustomer)
         {
             var customer = await set.FindAsync(updatedCustomer.Id);
-           if(customer == null) throw new Exception("Customer not found");
+            if (customer == null) throw new Exception("Customer not found");
             customer.Name = updatedCustomer.Name ?? customer.Name;
             customer.Surname = updatedCustomer.Surname ?? customer.Surname;
             customer.gmail = updatedCustomer.gmail ?? customer.gmail;
             customer.PhoneNumber = updatedCustomer.PhoneNumber ?? customer.PhoneNumber;
-            if(!string.IsNullOrEmpty(updatedCustomer.Password))
+            if (!string.IsNullOrEmpty(updatedCustomer.Password))
             {
                 string encryptedPassword = crypto.Encrypt(updatedCustomer.Password);
                 customer.Password = encryptedPassword;
@@ -79,6 +81,24 @@ namespace GunShopBackPart.Repository
             set.Update(customer);
             await context.SaveChangesAsync();
 
+        }
+
+        public async Task<string> Login(string password, string username)
+        {
+            var customer = await set.FirstOrDefaultAsync(c => c.Login == username);
+            if (customer == null)
+            {
+                throw new Exception("Customer not found");
+            }
+            string encryptedPassword = crypto.Encrypt(password);
+            if (customer.Password != encryptedPassword)
+            {
+                throw new Exception("Invalid password");
+            }
+            // Generate a token (for simplicity, using a GUID here)
+            string token = jvtProvider.GenJVT(customer.Id, customer.Name);
+            // In a real application, you would want to store this token and associate it with the customer for authentication purposes
+            return token;
         }
     }
 }

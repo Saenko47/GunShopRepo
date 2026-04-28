@@ -11,6 +11,8 @@ namespace GunShopBackPart.Interfaces
 
         Task CreateCustomerAsync(CreateCustomerRequest customer);
         Task DeleteCustomerAsync(int id);
+
+        Task<string> Login(string password, string username);
         Task UpdateCustomerAsync(CustomerUpdateRequest updatedCustomer);
     }
 }

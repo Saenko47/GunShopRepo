@@ -51,5 +51,26 @@ namespace GunShopBackPart.Controllers
             await customerServices.UpdateCustomerAsync(customer);
             return Ok();
         }
+
+        [HttpPost("login")]
+
+        public async Task<IActionResult> Login([FromForm] string username, [FromForm] string password, HttpContext context)
+        {
+            var token = await customerServices.Login(password, username);
+            if (token == null)
+            {
+                return Unauthorized();
+            }
+
+            context.Response.Cookies.Append("AuthToken", token, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict,
+                Expires = DateTimeOffset.UtcNow.AddHours(1)
+            });
+
+            return Ok(new { Token = token });
+        }
     }
 }

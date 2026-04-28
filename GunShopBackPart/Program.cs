@@ -5,6 +5,7 @@ using GunShopBackPart.Models;
 using GunShopBackPart.Repository;
 using GunShopBackPart.Tool.CreateProduct;
 using GunShopBackPart.Tool.Crypto;
+using GunShopBackPart.Tool.JVT;
 using GunShopBackPart.Tool.Update;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,6 +32,7 @@ builder.Services.AddScoped(typeof(IHandleProductUpdate), typeof(HandleProductUpd
 builder.Services.AddScoped(typeof(IUpdateProductHelper), typeof(UpdateProductHelper));
 builder.Services.AddScoped(typeof(ICrypto), typeof(Crypto));
 builder.Services.AddScoped(typeof(IProductPurchaseRepo), typeof(ProductPurchaseRepo));
+builder.Services.AddScoped(typeof(IJVTProvider), typeof(JVTProvider));
 
 var app = builder.Build();
 
@@ -59,6 +61,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
