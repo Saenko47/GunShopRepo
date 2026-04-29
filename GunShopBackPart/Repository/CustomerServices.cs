@@ -8,6 +8,7 @@ using GunShopBackPart.RequestsObjects.UpdateRequests.CustomerUpdate;
 using GunShopBackPart.Tool.DTO;
 using GunShopBackPart.Tool.JVT;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 
 namespace GunShopBackPart.Repository
 {
@@ -99,20 +100,40 @@ namespace GunShopBackPart.Repository
             {
                 throw new Exception("Invalid password");
             }
-    
+
             // Generate a token (for simplicity, using a GUID here)
             string token = jvtProvider.GenJVT(customer.Id, customer.Name, Role.User);
             // In a real application, you would want to store this token and associate it with the customer for authentication purposes
             return token;
         }
-        public async Task<CustomerDTO> CreateCustomerDTO(int id) 
-        { 
-        var customer = await set.Where(c => c.Id == id).
-                Include(l => l.Licenses).
-                Include(gp => gp.GunPurchases).
-                FirstOrDefaultAsync();
+        public async Task<CustomerDTO> CreateCustomerDTO(int id)
+        {
+            var customer = await set.Where(c => c.Id == id).
+                    Include(l => l.Licenses).
+                    Include(gp => gp.GunPurchases).
+                    FirstOrDefaultAsync();
             if (customer == null) throw new Exception("Customer not found");
             return customer.ToCustomerDTO();
+        }
+
+        public async Task AddLicenseToCustomer(int customerId, WeaponPermit licenseType)
+        {
+            var customer = await set.Where(c => c.Id == customerId)
+                                    .Include(l => l.Licenses)
+                                    .FirstOrDefaultAsync();
+            if (customer == null) throw new Exception("Customer not found");
+
+            var newLicense = new Licens
+            {
+                CustomerId = customerId,
+                PermitType = licenseType,
+                ExpirationDate = DateTime.Now.AddYears(1) // Example expiration date
+            };
+            customer.Licenses.Add(newLicense);
+
+            await context.SaveChangesAsync();
+
+
         }
     }
 }
