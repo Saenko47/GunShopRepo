@@ -8,6 +8,6 @@ namespace GunShopBackPart.Interfaces
     {
         Task<List<ProductPurchase>?> GetAllPurchaseOfCustomerAsync(int customerId);
 
-        Task Purchase(PurchaseRequest request);
+        Task Purchase(PurchaseRequest purcahseRequest);
     }
 }

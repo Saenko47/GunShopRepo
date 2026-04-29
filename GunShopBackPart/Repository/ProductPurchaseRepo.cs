@@ -32,7 +32,7 @@ namespace GunShopBackPart.Repository
             }
             return purchases;
         }
-        private async Task<InventoryItem> FindProductById(int productId) 
+        private async Task<InventoryItem> FindInventoryItemById(int productId) 
         {
             var product = await _context.Set<InventoryItem>()
        .FirstOrDefaultAsync(p => p.Id == productId);
@@ -43,21 +43,38 @@ namespace GunShopBackPart.Repository
             }
             return product;
         }
-        public async Task Purchase(PurchaseRequest request)
+        public async Task Purchase(PurchaseRequest purcahseRequest)
         {
-            if(!await _customerServices.IsCustomerHasLicenseAsync(request.CustomerId, request.LicenseType))
+            var customer = await _customerServices.GetCustomerByIdAsync(purcahseRequest.CustomerId);
+            if(customer == null)
+            {
+                throw new KeyNotFoundException("Customer not found.");
+            }
+            var product = await _context.Set<BaseProduct>().FirstOrDefaultAsync(p => p.Id == purcahseRequest.ProductId);
+            if(product == null)
+            {
+                throw new KeyNotFoundException("Product not found.");
+            }
+            if (!await _context.Set<InventoryItem>().AnyAsync(i => i.ProductId == product.Id && !i.isSold)) 
+            { 
+            throw new InvalidOperationException("Product is out of stock.");
+            }
+
+            if (!await _customerServices.IsCustomerHasLicenseAsync(customer.Id, product.RequiredPermit))
             {
                 throw new InvalidOperationException("Customer does not have the required license.");
             }
 
-            var inventoryItem = await FindProductById(request.Id);
+            var inventoryItem = await FindInventoryItemById(purcahseRequest.ProductId);
+            inventoryItem.isSold = true;
 
             ProductPurchase purchase = new ProductPurchase
             {
-                CustomerId = request.CustomerId,
+                CustomerId = purcahseRequest.CustomerId,
                 InventoryItemId = inventoryItem.Id,
                 PurchaseDate = DateTime.Now 
             };
+           
             set.Add(purchase);
 
             await _context.SaveChangesAsync();
