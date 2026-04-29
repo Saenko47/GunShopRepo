@@ -24,7 +24,7 @@ namespace GunShopBackPart.Tool.JVT
             {
                 new Claim("id", id.ToString()),
                 new Claim("username", username),
-                new Claim("role", role.ToString())
+                new Claim(ClaimTypes.Role, role.ToString())
             };          
             var singningCredentials = new Microsoft.IdentityModel.Tokens.SigningCredentials(
                 new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(

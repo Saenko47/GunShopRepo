@@ -11,7 +11,7 @@ namespace GunShopBackPart.Interfaces
         Task<Customer?> GetCustomerByIdAsync(int id);
         Task<bool> IsCustomerHasLicenseAsync(int customerId, WeaponPermit licenseType);
 
-        Task CreateCustomerAsync(CreateCustomerRequest customer);
+        Task<Customer> CreateCustomerAsync(CreateCustomerRequest customer);
         Task DeleteCustomerAsync(int id);
 
         Task<string> LoginAsCustomerAsync(CustomerLoginRequest req);

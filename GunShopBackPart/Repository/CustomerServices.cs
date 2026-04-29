@@ -7,6 +7,7 @@ using GunShopBackPart.RequestsObjects.LoginRequest;
 using GunShopBackPart.RequestsObjects.UpdateRequests.CustomerUpdate;
 using GunShopBackPart.Tool.DTO;
 using GunShopBackPart.Tool.JVT;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
 
@@ -40,7 +41,7 @@ namespace GunShopBackPart.Repository
          .AnyAsync(c => c.Id == customerId &&
                         c.Licenses.Any(l => l.PermitType == licenseType && l.ExpirationDate > DateTime.Now));
         }
-        public async Task CreateCustomerAsync(CreateCustomerRequest customer)
+        public async Task<Customer> CreateCustomerAsync(CreateCustomerRequest customer)
         {
             if (await set.AnyAsync(c => c.Login == customer.Login))
                 throw new Exception("Customer with this login already exists");
@@ -60,6 +61,7 @@ namespace GunShopBackPart.Repository
 
             await set.AddAsync(newCustomer);
             await context.SaveChangesAsync();
+            return newCustomer;
         }
         public async Task DeleteCustomerAsync(int id)
         {
@@ -95,8 +97,16 @@ namespace GunShopBackPart.Repository
             {
                 throw new Exception("Customer not found");
             }
-            string encryptedPassword = crypto.Encrypt(req.Password);
-            if (customer.Password != encryptedPassword)
+            //var hasher = new PasswordHasher<object>();
+
+            //var result = hasher.VerifyHashedPassword(null, customer.Password, req.Password);
+
+            //if (result == PasswordVerificationResult.Failed)
+            //{
+            //    throw new Exception("Invalid password");
+            //}
+            var decryptedPassword = crypto.Decrypt(customer.Password);
+            if (decryptedPassword != req.Password)
             {
                 throw new Exception("Invalid password");
             }

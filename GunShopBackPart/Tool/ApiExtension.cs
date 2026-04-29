@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Runtime.CompilerServices;
+using System.Security.Claims;
 using System.Text;
 
 namespace GunShopBackPart.Tool
@@ -20,7 +21,7 @@ namespace GunShopBackPart.Tool
                 {
                     opt.TokenValidationParameters = new TokenValidationParameters
                     {
-                        RoleClaimType = "role",
+                        RoleClaimType = ClaimTypes.Role,
                         ValidateAudience = false,
                         ValidateIssuer = false,
                         ValidateLifetime = true,

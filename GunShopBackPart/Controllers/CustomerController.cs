@@ -4,6 +4,7 @@ using GunShopBackPart.Models;
 using GunShopBackPart.RequestsObjects.CreateRequests.CustomerCreateRequests;
 using GunShopBackPart.RequestsObjects.LoginRequest;
 using GunShopBackPart.RequestsObjects.UpdateRequests.CustomerUpdate;
+using GunShopBackPart.Tool.JVT;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,10 +15,12 @@ namespace GunShopBackPart.Controllers
     public class CustomerController : ControllerBase
     {
         private readonly ICustomerServices customerServices;
+        private readonly IJVTProvider jvtProvider;
 
-        public CustomerController(ICustomerServices customerServices)
+        public CustomerController(ICustomerServices customerServices, IJVTProvider jvtProvider)
         {
             this.customerServices = customerServices;
+            this.jvtProvider = jvtProvider;
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCustomerById(int id)
@@ -37,17 +40,20 @@ namespace GunShopBackPart.Controllers
             return Ok(hasLicense);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> RegisterCustomer([FromForm] CreateCustomerRequest customer, HttpContext context)
+        [HttpPost("register")]
+        public async Task<IActionResult> RegisterCustomer([FromForm] CreateCustomerRequest customer)
         {
-            await customerServices.CreateCustomerAsync(customer);
-            var req = new CustomerLoginRequest
-            {
-                Login = customer.Login,
-                Password = customer.Password
+           var createdCustomer = await customerServices.CreateCustomerAsync(customer);
 
-            };
-            var token = await customerServices.LoginAsCustomerAsync(req);
+            Console.WriteLine($"Login from request: {customer.Login}");
+            Console.WriteLine($"CreatedCustomer login: {createdCustomer?.Login}");
+
+            var token = jvtProvider.GenJVT(
+            createdCustomer.Id,
+            customer.Login,
+            Role.User
+     );
+
             Response.Cookies.Append("AuthToken", token, new CookieOptions
             {
                 HttpOnly = true,
@@ -76,7 +82,7 @@ namespace GunShopBackPart.Controllers
 
         [HttpPost("login")]
 
-        public async Task<IActionResult> Login([FromForm] CustomerLoginRequest req, HttpContext context)
+        public async Task<IActionResult> Login([FromForm] CustomerLoginRequest req)
         {
             var token = await customerServices.LoginAsCustomerAsync(req);
             if (token == null)
@@ -84,7 +90,7 @@ namespace GunShopBackPart.Controllers
                 return Unauthorized();
             }
 
-            context.Response.Cookies.Append("AuthToken", token, new CookieOptions
+            Response.Cookies.Append("AuthToken", token, new CookieOptions
             {
                 HttpOnly = true,
                 Secure = true,
@@ -94,10 +100,11 @@ namespace GunShopBackPart.Controllers
 
             return Ok();
         }
-        [HttpPost]
-        public async Task<IActionResult> Logout(HttpContext context)
+        [HttpPost("logout")]
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> Logout()
         {
-            context.Response.Cookies.Delete("AuthToken");
+          Response.Cookies.Delete("AuthToken");
             return Ok();
         }
 
