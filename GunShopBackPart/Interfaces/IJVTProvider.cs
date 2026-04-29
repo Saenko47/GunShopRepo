@@ -1,7 +1,9 @@
-﻿namespace GunShopBackPart.Interfaces
+﻿using GunShopBackPart.Tool.JVT;
+
+namespace GunShopBackPart.Interfaces
 {
     public interface IJVTProvider
     {
-        string GenJVT(int id, string username);
+        public string GenJVT(int id, string username, Role role);
     }
 }

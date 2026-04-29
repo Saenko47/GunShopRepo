@@ -96,7 +96,7 @@ namespace GunShopBackPart.Repository
                 throw new Exception("Invalid password");
             }
             // Generate a token (for simplicity, using a GUID here)
-            string token = jvtProvider.GenJVT(customer.Id, customer.Name);
+            string token = jvtProvider.GenJVT(customer.Id, customer.Name, Role.User);
             // In a real application, you would want to store this token and associate it with the customer for authentication purposes
             return token;
         }

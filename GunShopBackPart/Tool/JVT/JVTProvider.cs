@@ -4,6 +4,11 @@ using System.Security.Claims;
 
 namespace GunShopBackPart.Tool.JVT
 {
+    public enum Role
+    {
+        Admin,
+        User
+    }
     public class JVTProvider: IJVTProvider
     {
         private readonly IOptions<JvtOptions> _settings;
@@ -13,12 +18,13 @@ namespace GunShopBackPart.Tool.JVT
             _settings = settings;
         }
 
-        public string GenJVT(int id, string username) 
+        public string GenJVT(int id, string username, Role role) 
         {
             Claim[] claims = new Claim[]
             {
                 new Claim("id", id.ToString()),
-                new Claim("username", username)
+                new Claim("username", username),
+                new Claim("role", role.ToString())
             };          
             var singningCredentials = new Microsoft.IdentityModel.Tokens.SigningCredentials(
                 new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(
