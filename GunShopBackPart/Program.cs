@@ -3,11 +3,13 @@ using GunShopBackPart.Interfaces;
 using GunShopBackPart.Mappers;
 using GunShopBackPart.Models;
 using GunShopBackPart.Repository;
+using GunShopBackPart.Tool;
 using GunShopBackPart.Tool.CreateProduct;
 using GunShopBackPart.Tool.Crypto;
 using GunShopBackPart.Tool.JVT;
 using GunShopBackPart.Tool.Update;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +35,7 @@ builder.Services.AddScoped(typeof(IUpdateProductHelper), typeof(UpdateProductHel
 builder.Services.AddScoped(typeof(ICrypto), typeof(Crypto));
 builder.Services.AddScoped(typeof(IProductPurchaseRepo), typeof(ProductPurchaseRepo));
 builder.Services.AddScoped(typeof(IJVTProvider), typeof(JVTProvider));
+builder.Services.AddAuthenticationHeader(builder.Configuration);
 
 var app = builder.Build();
 

@@ -1,7 +1,10 @@
-﻿using GunShopBackPart.Interfaces;
+﻿using Azure;
+using GunShopBackPart.Interfaces;
 using GunShopBackPart.Models;
 using GunShopBackPart.RequestsObjects.CreateRequests.CustomerCreateRequests;
+using GunShopBackPart.RequestsObjects.LoginRequest;
 using GunShopBackPart.RequestsObjects.UpdateRequests.CustomerUpdate;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GunShopBackPart.Controllers
@@ -33,18 +36,37 @@ namespace GunShopBackPart.Controllers
             var hasLicense = await customerServices.IsCustomerHasLicenseAsync(id, licenseType);
             return Ok(hasLicense);
         }
+
         [HttpPost]
-        public async Task<IActionResult> CreateCustomer([FromForm] CreateCustomerRequest customer)
+        public async Task<IActionResult> RegisterCustomer([FromForm] CreateCustomerRequest customer, HttpContext context)
         {
             await customerServices.CreateCustomerAsync(customer);
+            var req = new CustomerLoginRequest
+            {
+                Login = customer.Login,
+                Password = customer.Password
+
+            };
+            var token = await customerServices.LoginAsCustomerAsync(req);
+            Response.Cookies.Append("AuthToken", token, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Lax,
+                Expires = DateTimeOffset.UtcNow.AddHours(1)
+            });
+
             return Ok();
+
         }
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCustomer(int id)
         {
             await customerServices.DeleteCustomerAsync(id);
             return Ok();
         }
+        [Authorize(Roles = "User")]
         [HttpPut]
         public async Task<IActionResult> UpdateCustomer([FromForm] CustomerUpdateRequest customer)
         {
@@ -54,9 +76,9 @@ namespace GunShopBackPart.Controllers
 
         [HttpPost("login")]
 
-        public async Task<IActionResult> Login([FromForm] string username, [FromForm] string password, HttpContext context)
+        public async Task<IActionResult> Login([FromForm] CustomerLoginRequest req, HttpContext context)
         {
-            var token = await customerServices.Login(password, username);
+            var token = await customerServices.LoginAsCustomerAsync(req);
             if (token == null)
             {
                 return Unauthorized();
@@ -70,7 +92,29 @@ namespace GunShopBackPart.Controllers
                 Expires = DateTimeOffset.UtcNow.AddHours(1)
             });
 
-            return Ok(new { Token = token });
+            return Ok();
         }
+        [HttpPost]
+        public async Task<IActionResult> Logout(HttpContext context)
+        {
+            context.Response.Cookies.Delete("AuthToken");
+            return Ok();
+        }
+
+        [HttpGet("/customerProfile")]
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> GetCustomerProfile() 
+        {
+            var idClaim = User.FindFirst("id")?.Value;
+
+            if (!int.TryParse(idClaim, out var customerId))
+            {
+                return Unauthorized();
+            }
+            
+            var customerDTO = await customerServices.CreateCustomerDTO(customerId);
+            return Ok(customerDTO);
+        }
+
     }
 }

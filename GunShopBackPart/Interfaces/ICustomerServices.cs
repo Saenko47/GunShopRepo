@@ -1,5 +1,7 @@
-﻿using GunShopBackPart.Models;
+﻿using GunShopBackPart.DTOs;
+using GunShopBackPart.Models;
 using GunShopBackPart.RequestsObjects.CreateRequests.CustomerCreateRequests;
+using GunShopBackPart.RequestsObjects.LoginRequest;
 using GunShopBackPart.RequestsObjects.UpdateRequests.CustomerUpdate;
 
 namespace GunShopBackPart.Interfaces
@@ -12,7 +14,8 @@ namespace GunShopBackPart.Interfaces
         Task CreateCustomerAsync(CreateCustomerRequest customer);
         Task DeleteCustomerAsync(int id);
 
-        Task<string> Login(string password, string username);
+        Task<string> LoginAsCustomerAsync(CustomerLoginRequest req);
         Task UpdateCustomerAsync(CustomerUpdateRequest updatedCustomer);
+        Task<CustomerDTO> CreateCustomerDTO(int id);
     }
 }

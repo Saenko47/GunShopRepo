@@ -1,8 +1,12 @@
 ﻿using GunShopBackPart.Data;
+using GunShopBackPart.DTOs;
 using GunShopBackPart.Interfaces;
 using GunShopBackPart.Models;
 using GunShopBackPart.RequestsObjects.CreateRequests.CustomerCreateRequests;
+using GunShopBackPart.RequestsObjects.LoginRequest;
 using GunShopBackPart.RequestsObjects.UpdateRequests.CustomerUpdate;
+using GunShopBackPart.Tool.DTO;
+using GunShopBackPart.Tool.JVT;
 using Microsoft.EntityFrameworkCore;
 
 namespace GunShopBackPart.Repository
@@ -83,22 +87,32 @@ namespace GunShopBackPart.Repository
 
         }
 
-        public async Task<string> Login(string password, string username)
+        public async Task<string> LoginAsCustomerAsync(CustomerLoginRequest req)
         {
-            var customer = await set.FirstOrDefaultAsync(c => c.Login == username);
+            var customer = await set.FirstOrDefaultAsync(c => c.Login == req.Login);
             if (customer == null)
             {
                 throw new Exception("Customer not found");
             }
-            string encryptedPassword = crypto.Encrypt(password);
+            string encryptedPassword = crypto.Encrypt(req.Password);
             if (customer.Password != encryptedPassword)
             {
                 throw new Exception("Invalid password");
             }
+    
             // Generate a token (for simplicity, using a GUID here)
             string token = jvtProvider.GenJVT(customer.Id, customer.Name, Role.User);
             // In a real application, you would want to store this token and associate it with the customer for authentication purposes
             return token;
+        }
+        public async Task<CustomerDTO> CreateCustomerDTO(int id) 
+        { 
+        var customer = await set.Where(c => c.Id == id).
+                Include(l => l.Licenses).
+                Include(gp => gp.GunPurchases).
+                FirstOrDefaultAsync();
+            if (customer == null) throw new Exception("Customer not found");
+            return customer.ToCustomerDTO();
         }
     }
 }
