@@ -17,6 +17,5 @@ namespace GunShopBackPart.Interfaces
         Task<string> LoginAsCustomerAsync(CustomerLoginRequest req);
         Task UpdateCustomerAsync(CustomerUpdateRequest updatedCustomer);
         Task<CustomerDTO> CreateCustomerDTO(int id);
-        Task<bool> IsCustomerHasLicenseAsync(int id, object requiredPermit);
     }
 }
