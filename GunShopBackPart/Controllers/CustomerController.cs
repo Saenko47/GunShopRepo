@@ -122,6 +122,19 @@ namespace GunShopBackPart.Controllers
             var customerDTO = await customerServices.CreateCustomerDTO(customerId);
             return Ok(customerDTO);
         }
+        [HttpPut("/addlicense")]
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> AddLicense([FromForm]WeaponPermit req )
+        {
+            var idClaim = User.FindFirst("id")?.Value;
 
+            if (!int.TryParse(idClaim, out var customerId))
+            {
+                return Unauthorized();
+            }
+
+            await customerServices.AddLicenseAsync(customerId, req);
+            return Ok();
+        }
     }
 }

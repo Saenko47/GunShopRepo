@@ -18,7 +18,7 @@ namespace GunShopBackPart.Controllers
             _purchase_repo = purchase_repo;
         }
 
-        [HttpPost]
+        [HttpPost("/buy")]
         [Authorize(Roles ="User")]
         public async Task<IActionResult> PurchaseProduct([FromBody]PurchaseRequest purcahseRequest)
         {

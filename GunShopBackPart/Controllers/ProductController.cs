@@ -22,19 +22,37 @@ namespace GunShopBackPart.Controllers
            
         }
 
-        [HttpGet]
+        [HttpGet("/products")]
         public async Task<IActionResult> GetProducts([FromQuery] PageQuery pq, [FromQuery] Filter f)
         {
 
 
-            var products = await _repo.GetObjectsByPages(pq, f);
+            var products = await _repo.GetProductObjectsByPages(pq, f);
 
 
 
             return Ok(products);
 
         }
-        
+        [HttpGet("products/guns")]
+        public async Task<IActionResult> GetGuns([FromQuery] PageQuery pq, [FromQuery] FilterGun filter)
+        {
+            var products = await _repo.GetGunObjectsByPages(pq, filter);
+            return Ok(products);
+        }
+        [HttpGet("products/ammos")]
+        public async Task<IActionResult> GetAmmos([FromQuery] PageQuery pq, [FromQuery] FilterAmmo filter)
+        {
+            var products = await _repo.GetAmmoObjectsByPages(pq, filter);
+            return Ok(products);
+        }
+                [HttpGet("products/accessories")]
+                        public async Task<IActionResult> GetAccessories([FromQuery] PageQuery pq, [FromQuery] FilterAccesorie filter)
+                    {
+            var products = await _repo.GetAccessoryObjectsByPages(pq, filter);
+            return Ok(products);
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {

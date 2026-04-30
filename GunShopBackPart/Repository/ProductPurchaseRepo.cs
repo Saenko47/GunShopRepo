@@ -35,7 +35,7 @@ namespace GunShopBackPart.Repository
         private async Task<InventoryItem> FindInventoryItemById(int productId) 
         {
             var product = await _context.Set<InventoryItem>()
-       .FirstOrDefaultAsync(p => p.Id == productId);
+       .FirstOrDefaultAsync(p => p.ProductId == productId && !p.isSold);
 
             if (product == null)
             {

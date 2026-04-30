@@ -1,17 +1,15 @@
-﻿using GunShopBackPart.Models;
+﻿using GunShopBackPart.DTOs;
+using GunShopBackPart.Models;
 
 namespace GunShopBackPart.Tool.PageCreation
 {
     public class Filter
     {
-        public int? MinPrice { get;  set; }
-        public int? MaxPrice { get;  set; }
+        public int? MinPrice { get; set; } = null;
+        public int? MaxPrice { get; set; } = null;
 
-        public GunType? GunType { get;  set; } = null;
-
-        public Caliber? Caliber { get;  set; } = null;
-
-        public AccessoryType? Type { get;  set; } = null;
+        public decimal? Price { get; set; } = null;
+     
         public WeaponPermit? RequiredPermit { get;  set; } = null;
 
         public string? SupplierName { get;  set; } = null;  

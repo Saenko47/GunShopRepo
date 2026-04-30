@@ -13,7 +13,7 @@ namespace GunShopBackPart.Interfaces
 
         Task<Customer> CreateCustomerAsync(CreateCustomerRequest customer);
         Task DeleteCustomerAsync(int id);
-
+        Task AddLicenseAsync(int customerId, WeaponPermit licenseType);
         Task<string> LoginAsCustomerAsync(CustomerLoginRequest req);
         Task UpdateCustomerAsync(CustomerUpdateRequest updatedCustomer);
         Task<CustomerDTO> CreateCustomerDTO(int id);

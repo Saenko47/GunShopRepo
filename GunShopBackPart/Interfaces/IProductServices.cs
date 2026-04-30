@@ -9,7 +9,11 @@ namespace GunShopBackPart.Interfaces
     public interface IProductServices
     {
         Task<ProductDTO?> GetByIdAsync(int id);
-        Task<List<ProductDTO>> GetObjectsByPages(PageQuery pq, Filter filter);
+        Task<List<ProductDTO>> GetProductObjectsByPages(PageQuery pq, Filter filter);
+        Task<List<ProductDTO>> GetGunObjectsByPages(PageQuery pq, FilterGun filter);
+        Task<List<ProductDTO>> GetAmmoObjectsByPages(PageQuery pq, FilterAmmo filter);
+        Task<List<ProductDTO>> GetAccessoryObjectsByPages(PageQuery pq, FilterAccesorie filter);
+
 
         Task<BaseProduct> CreateProductAsync(ProductRequest productDTO);
         Task<BaseProduct> UpdateProductAsync(UpdateProductRequest p);

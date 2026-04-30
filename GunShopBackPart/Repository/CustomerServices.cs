@@ -126,7 +126,7 @@ namespace GunShopBackPart.Repository
             return customer.ToCustomerDTO();
         }
 
-        public async Task AddLicenseToCustomer(int customerId, WeaponPermit licenseType)
+        public async Task AddLicenseAsync(int customerId, WeaponPermit licenseType)
         {
             var customer = await set.Where(c => c.Id == customerId)
                                     .Include(l => l.Licenses)
