@@ -20,11 +20,17 @@ namespace GunShopBackPart.Controllers
 
         [HttpPost("/buy")]
         [Authorize(Roles ="User")]
-        public async Task<IActionResult> PurchaseProduct([FromBody]PurchaseRequest purcahseRequest)
+        public async Task<IActionResult> PurchaseProduct([FromBody]int ProductIdt)
         {
+            var idClaim = User.FindFirst("id")?.Value;
+            PurchaseRequest purchaseRequest = new PurchaseRequest
+            {
+                CustomerId = int.Parse(idClaim),
+                ProductId = ProductIdt
+            };
             try
             {
-                await _purchase_repo.Purchase(purcahseRequest);
+                await _purchase_repo.Purchase(purchaseRequest);
                 return Ok("Purchase successful.");
             }
             catch (Exception ex)
