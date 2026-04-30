@@ -35,6 +35,7 @@ builder.Services.AddScoped(typeof(IUpdateProductHelper), typeof(UpdateProductHel
 builder.Services.AddScoped(typeof(ICrypto), typeof(Crypto));
 builder.Services.AddScoped(typeof(IProductPurchaseRepo), typeof(ProductPurchaseRepo));
 builder.Services.AddScoped(typeof(IJVTProvider), typeof(JVTProvider));
+builder.Services.AddScoped(typeof(IProductPurchaseServices), typeof(ProductPurchaseServices));
 builder.Services.AddAuthenticationHeader(builder.Configuration);
 builder.Services.Configure<JvtOptions>(
     builder.Configuration.GetSection("JwtOptions"));
