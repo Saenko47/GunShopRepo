@@ -1,4 +1,6 @@
-﻿namespace GunShopBackPart.Models
+﻿using GunShopBackPart.Interfaces;
+
+namespace GunShopBackPart.Models
 {
     public enum WeaponPermit
     {
@@ -7,7 +9,7 @@
         ForShotgun,
         None
     }
-    public class Customer
+    public class Customer: IAuthEntity
     {
         public string Name { get; set; } = string.Empty;
         public string Surname { get; set; } = string.Empty;

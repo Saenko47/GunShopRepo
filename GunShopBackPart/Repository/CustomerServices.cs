@@ -19,12 +19,13 @@ namespace GunShopBackPart.Repository
         private readonly DbSet<Customer> set;
         private readonly ICrypto crypto;
         private readonly IJVTProvider jvtProvider;
-
-        public CustomerServices(ApplicationDBContext context, ICrypto crypto, IJVTProvider jvtProvider)
+        private readonly ILogin loginHelper;
+        public CustomerServices(ApplicationDBContext context, ICrypto crypto, IJVTProvider jvtProvider, ILogin loginHelper)
         {
             this.context = context;
             this.crypto = crypto;
             this.jvtProvider = jvtProvider;
+            this.loginHelper = loginHelper;
             set = context.Set<Customer>();
         }
 
@@ -93,28 +94,7 @@ namespace GunShopBackPart.Repository
         public async Task<string> LoginAsCustomerAsync(CustomerLoginRequest req)
         {
             var customer = await set.FirstOrDefaultAsync(c => c.Login == req.Login);
-            if (customer == null)
-            {
-                throw new Exception("Customer not found");
-            }
-            //var hasher = new PasswordHasher<object>();
-
-            //var result = hasher.VerifyHashedPassword(null, customer.Password, req.Password);
-
-            //if (result == PasswordVerificationResult.Failed)
-            //{
-            //    throw new Exception("Invalid password");
-            //}
-            var decryptedPassword = crypto.Decrypt(customer.Password);
-            if (decryptedPassword != req.Password)
-            {
-                throw new Exception("Invalid password");
-            }
-
-            // Generate a token (for simplicity, using a GUID here)
-            string token = jvtProvider.GenJVT(customer.Id, customer.Name, Role.User);
-            // In a real application, you would want to store this token and associate it with the customer for authentication purposes
-            return token;
+           return await loginHelper.LoginAsync(set, req, Role.User);
         }
         public async Task<CustomerDTO> CreateCustomerDTO(int id)
         {

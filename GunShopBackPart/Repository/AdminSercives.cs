@@ -2,6 +2,8 @@
 using GunShopBackPart.Interfaces;
 using GunShopBackPart.Models;
 using GunShopBackPart.RequestsObjects.CreateRequests.AdminCreateRequest;
+using GunShopBackPart.RequestsObjects.LoginRequest;
+using GunShopBackPart.Tool.JVT;
 using Microsoft.EntityFrameworkCore;
 
 namespace GunShopBackPart.Repository
@@ -10,12 +12,14 @@ namespace GunShopBackPart.Repository
     {
         private readonly ApplicationDBContext context;
         private readonly DbSet<Admin> admins;
+        private readonly ILogin loginHelper;
         private readonly ICrypto crypto;
 
-        public AdminSercives(ApplicationDBContext context, ICrypto crypto)
+        public AdminSercives(ApplicationDBContext context, ICrypto crypto, ILogin login)
         {
             this.context = context;
             this.crypto = crypto;
+            loginHelper = login;
             admins = context.Set<Admin>();
         }
 
@@ -59,6 +63,10 @@ namespace GunShopBackPart.Repository
             admin.UpdatedAt = DateTime.UtcNow;
             await context.SaveChangesAsync();
 
+        }
+        public async Task<string> Login(CustomerLoginRequest req)
+        {
+           return await loginHelper.LoginAsync(admins, req, Role.Admin);
         }
     }
 }
