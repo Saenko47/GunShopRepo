@@ -34,7 +34,7 @@ namespace GunShopBackPart.Data
                 .HasOne(p => p.Supplier)
                 .WithMany(s => s.Products)
                 .HasForeignKey(p => p.SupplierId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<ProductPurchase>()
                 .HasOne(pp => pp.Customer)

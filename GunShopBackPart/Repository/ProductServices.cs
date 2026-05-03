@@ -220,6 +220,11 @@ namespace GunShopBackPart.Repository
             return product;
 
         }
+        public async Task<List<ProductDTO>?> FindProductByNameAsync(string name)
+        {
+            var products = await set.Where(p => p.Name.Contains(name)).ToListAsync();
+            return products?.Select(p => p.ToProductDTO()).ToList();
+        }
 
     }
 }

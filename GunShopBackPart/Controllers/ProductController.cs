@@ -21,7 +21,12 @@ namespace GunShopBackPart.Controllers
             _repo = repo;
            
         }
-
+        [HttpGet("/search")]
+        public async Task<IActionResult> SearchProductByName([FromQuery] string query)
+        {
+            var products = await _repo.FindProductByNameAsync(query);
+            return Ok(products);
+        }
         [HttpGet("/products")]
         public async Task<IActionResult> GetProducts([FromQuery] PageQuery pq, [FromQuery] Filter f)
         {
