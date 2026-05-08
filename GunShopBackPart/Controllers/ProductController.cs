@@ -6,6 +6,7 @@ using GunShopBackPart.RequestsObjects.CreateRequests.ProductCreateRequests;
 using GunShopBackPart.RequestsObjects.UpdateRequests.ProductUpdates;
 using GunShopBackPart.Tool.PageCreation;
 using Microsoft.AspNetCore.Mvc;
+using static System.Net.WebRequestMethods;
 
 namespace GunShopBackPart.Controllers
 {
@@ -14,20 +15,33 @@ namespace GunShopBackPart.Controllers
     public class ProductController : ControllerBase
     {
         private IProductServices _repo;
-      
+
 
         public ProductController(IProductServices repo)
         {
             _repo = repo;
-           
+
         }
-        [HttpGet("/search")]
-        public async Task<IActionResult> SearchProductByName([FromQuery] string query)
+        [HttpGet("test")]
+        public async Task<IActionResult> Test([FromQuery] PageQuery pq, [FromQuery] FilterGun filter)
         {
-            var products = await _repo.FindProductByNameAsync(query);
+            var products = await _repo.GetGunObjectsByPages(pq, filter);
+
+            var test = products.First();
+
+            return Ok(new
+            {
+                obj = test,
+                type = test.GetType().Name
+            });
+        }
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchProductByName([FromQuery] PageQuery pq,[FromQuery] string query)
+        {
+            var products = await _repo.FindProductByNameAsync(query, pq);
             return Ok(products);
         }
-        [HttpGet("/products")]
+        [HttpGet("products")]
         public async Task<IActionResult> GetProducts([FromQuery] PageQuery pq, [FromQuery] Filter f)
         {
 
@@ -39,21 +53,21 @@ namespace GunShopBackPart.Controllers
             return Ok(products);
 
         }
-        [HttpGet("products/guns")]
+        [HttpGet("guns")]
         public async Task<IActionResult> GetGuns([FromQuery] PageQuery pq, [FromQuery] FilterGun filter)
         {
             var products = await _repo.GetGunObjectsByPages(pq, filter);
             return Ok(products);
         }
-        [HttpGet("products/ammos")]
+        [HttpGet("ammos")]
         public async Task<IActionResult> GetAmmos([FromQuery] PageQuery pq, [FromQuery] FilterAmmo filter)
         {
             var products = await _repo.GetAmmoObjectsByPages(pq, filter);
             return Ok(products);
         }
-                [HttpGet("products/accessories")]
-                        public async Task<IActionResult> GetAccessories([FromQuery] PageQuery pq, [FromQuery] FilterAccesorie filter)
-                    {
+        [HttpGet("accessories")]
+        public async Task<IActionResult> GetAccessories([FromQuery] PageQuery pq, [FromQuery] FilterAccesorie filter)
+        {
             var products = await _repo.GetAccessoryObjectsByPages(pq, filter);
             return Ok(products);
         }
@@ -66,10 +80,10 @@ namespace GunShopBackPart.Controllers
             if (product == null)
                 return NotFound();
 
- 
+
             return Ok(product);
         }
-      
+
         [HttpPost("gun")]
         public async Task<IActionResult> CreateProductGun([FromForm] GunRequest request)
         {
@@ -85,7 +99,7 @@ namespace GunShopBackPart.Controllers
             }
 
         }
-         
+
         [HttpPost("ammo")]
         public async Task<IActionResult> CreateProductAmmo([FromForm] AmmoRequest request)
         {
@@ -167,6 +181,33 @@ namespace GunShopBackPart.Controllers
             {
                 return NotFound(ex.Message);
             }
+        }
+        [HttpGet("countForPagination/product")]
+        public async Task<IActionResult> GetCountForPagination([FromQuery] Filter f, int count)
+        {
+            var res = await _repo.GetCountForPaginationAsync(f, count);
+            return Ok(res);
+        }
+
+        [HttpGet("countForPagination/gun")]
+        public async Task<IActionResult> GetCountForPaginationGuns([FromQuery] FilterGun filter, int count)
+        {
+            var res = await _repo.GetCountForPaginationAsync(filter, count);
+            return Ok(res);
+        }
+        [HttpGet("countForPagination/ammo")]
+        public async Task<IActionResult> GetCountForPaginationAmmo([FromQuery] FilterAmmo filter, int count)
+        {
+            var res = await _repo.GetCountForPaginationAsync(filter, count);
+            return Ok(res);
+        }
+        [HttpGet("countForPagination/accesorie")]
+        public async Task<IActionResult> GetCountForPaginationAccessories([FromQuery] FilterAccesorie filter, int count)
+        {
+            var res = await _repo.GetCountForPaginationAsync(filter, count);
+            return Ok(res);
+
+
         }
     }
 }

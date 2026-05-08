@@ -5,6 +5,7 @@ namespace GunShopBackPart.Tool.PageCreation
 {
     public class Filter
     {
+        public string? Name { get; set; } = null;
         public int? MinPrice { get; set; } = null;
         public int? MaxPrice { get; set; } = null;
 

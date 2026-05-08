@@ -1,4 +1,7 @@
 ﻿using GunShopBackPart.Models;
+using System.Text.Json.Serialization;
+
+
 
 namespace GunShopBackPart.DTOs
 {
@@ -9,6 +12,10 @@ namespace GunShopBackPart.DTOs
         Ammo,
         None
     }
+    [JsonPolymorphic(TypeDiscriminatorPropertyName = "productType")]
+    [JsonDerivedType(typeof(GunDTO), (int)ProductType.Gun)]
+    [JsonDerivedType(typeof(AmmoDTO), (int)ProductType.Ammo)]
+    [JsonDerivedType(typeof(AccessorieDTO), (int)ProductType.Accessory)]
     abstract public class ProductDTO
     {
         public int Id { get; set; }
@@ -19,7 +26,7 @@ namespace GunShopBackPart.DTOs
         public string SupplierName { get; set; } = string.Empty;
         public WeaponPermit RequiredPermit { get; set; } = WeaponPermit.None;
         public string? ImageUrl { get; set; } = string.Empty;
-        public abstract ProductType ProductType { get; }
+        
 
 
     }

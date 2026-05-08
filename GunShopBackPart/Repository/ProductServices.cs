@@ -42,6 +42,7 @@ namespace GunShopBackPart.Repository
         public IQueryable<T> ApplyBaseFilter<T>(IQueryable<T> query, Filter filter)
     where T : class
         {
+           
             if (filter.MinPrice.HasValue)
             {
                 query = query.Where(e => EF.Property<int>(e, "Price") >= filter.MinPrice.Value);
@@ -64,6 +65,10 @@ namespace GunShopBackPart.Repository
         {
             var query = set.AsNoTracking().AsQueryable();
             query = ApplyBaseFilter(query, filter);
+            if (!string.IsNullOrEmpty(filter.Name)) 
+            {
+                query = query.Where(e => e.Name.Contains(filter.Name));
+            }
             if (!string.IsNullOrEmpty(filter.SupplierName))
             {
                 query = query.Where(e => e.Supplier.Name.Contains(filter.SupplierName));
@@ -84,26 +89,29 @@ namespace GunShopBackPart.Repository
 
             var query = GetBasicFilter(filter);
 
-           return await GetProductObjectsByPagesAsync(pq, query);
+            return await GetProductObjectsByPagesAsync(pq, query);
 
         }
-        public async Task<List<ProductDTO>> GetGunObjectsByPages(PageQuery pq, FilterGun filter)
+        private IQueryable<Gun> GetFilterForGun(FilterGun filter)
         {
-          var baseQuery = GetBasicFilter(filter);
+            var baseQuery = GetBasicFilter(filter);
             var query = baseQuery.OfType<Gun>();
             if (filter.Caliber.HasValue)
-           {
+            {
                 query = query.Where(e => e.Caliber == filter.Caliber);
             }
             if (filter.GunType.HasValue)
             {
                 query = query.Where(e => e.GunType == filter.GunType);
             }
-
-            return await GetProductObjectsByPagesAsync(pq, query);
+            return query;
         }
-
-        public async Task<List<ProductDTO>> GetAmmoObjectsByPages(PageQuery pq, FilterAmmo filter)
+        public async Task<List<ProductDTO>> GetGunObjectsByPages(PageQuery pq, FilterGun filter)
+        {
+            var baseQuery = GetFilterForGun(filter);
+            return await GetProductObjectsByPagesAsync(pq, baseQuery);
+        }
+        private IQueryable<Ammo> GetFilterForAmmo(FilterAmmo filter)
         {
             var baseQuery = GetBasicFilter(filter);
             var query = baseQuery.OfType<Ammo>();
@@ -111,14 +119,20 @@ namespace GunShopBackPart.Repository
             {
                 query = query.Where(e => e.Caliber == filter.Caliber);
             }
-            if(filter.Quantity.HasValue)
+            if (filter.Quantity.HasValue)
             {
                 query = query.Where(e => e.AmountInBox == filter.Quantity);
             }
-            return await GetProductObjectsByPagesAsync(pq, query);
+            return query;
+        }
+        public async Task<List<ProductDTO>> GetAmmoObjectsByPages(PageQuery pq, FilterAmmo filter)
+        {
+            var baseQuery = GetFilterForAmmo(filter);
+
+            return await GetProductObjectsByPagesAsync(pq, baseQuery);
         }
 
-        public async Task<List<ProductDTO>> GetAccessoryObjectsByPages(PageQuery pq, FilterAccesorie filter)
+        private IQueryable<Accessorie> GetFilterForAccessory(FilterAccesorie filter)
         {
             var baseQuery = GetBasicFilter(filter);
             var query = baseQuery.OfType<Accessorie>();
@@ -126,37 +140,44 @@ namespace GunShopBackPart.Repository
             {
                 query = query.Where(e => e.Type == filter.AccessoryType);
             }
-            return await GetProductObjectsByPagesAsync(pq, query);
+            return query;
         }
+        public async Task<List<ProductDTO>> GetAccessoryObjectsByPages(PageQuery pq, FilterAccesorie filter)
+        {
+            var baseQuery = GetFilterForAccessory(filter);
+            return await GetProductObjectsByPagesAsync(pq, baseQuery);
+        }
+
+
 
 
         public async Task<BaseProduct?> FindProductByName(string name)
         {
             return await set.FirstOrDefaultAsync(p => p.Name == name);
         }
-        public async Task AddInventoryItemAsyncById(BaseProduct product)
+        public async Task AddInventoryItemAsyncById(BaseProduct product, string sN)
         {
             var item = new InventoryItem
             {
                 ProductId = product.Id,
-                SerialNumber = Guid.NewGuid().ToString(),
+                SerialNumber = sN,
                 Location = "default"
             };
 
             context.Storage.Add(item);
         }
-        public async Task AddInventoryItemAsyncByNP(BaseProduct product)
+        public async Task AddInventoryItemAsyncByNP(BaseProduct product, string sN)
         {
             var item = new InventoryItem
             {
                 Product = product,
-                SerialNumber = Guid.NewGuid().ToString(),
+                SerialNumber = sN,
                 Location = "default"
             };
 
             context.Storage.Add(item);
         }
-       
+
         public async Task<BaseProduct> CreateProductAsync(ProductRequest request)
         {
             using var transaction = await context.Database.BeginTransactionAsync();
@@ -164,7 +185,7 @@ namespace GunShopBackPart.Repository
             var exist = await FindProductByName(request.Name);
             if (exist != null)
             {
-                await AddInventoryItemAsyncById(exist);
+                await AddInventoryItemAsyncById(exist, request.SerialNumber);
                 await context.SaveChangesAsync();
                 await transaction.CommitAsync();
                 return exist;
@@ -172,25 +193,25 @@ namespace GunShopBackPart.Repository
 
             var product = await _productFactory.CreateAsync(request);
             string imgUrl = img.CreateImageUrl(request.Image, request.ProductType);
-            if (request.Image != null) 
+            if (request.Image != null)
             {
-             
+
                 await img.SaveImageAsync(request.Image, imgUrl);
 
             }
-          
+
 
             product.ImageUrl = imgUrl;
 
             set.Add(product);
-           
 
-            await AddInventoryItemAsyncByNP(product);
+
+            await AddInventoryItemAsyncByNP(product, request.SerialNumber);
 
             await context.SaveChangesAsync();
             await transaction.CommitAsync();
 
-           
+
 
             return product;
         }
@@ -220,11 +241,37 @@ namespace GunShopBackPart.Repository
             return product;
 
         }
-        public async Task<List<ProductDTO>?> FindProductByNameAsync(string name)
+        public async Task<List<ProductDTO>?> FindProductByNameAsync(string name, PageQuery pq)
         {
-            var products = await set.Where(p => p.Name.Contains(name)).ToListAsync();
-            return products?.Select(p => p.ToProductDTO()).ToList();
-        }
+            var query = set
+           .Where(p => p.Name.Contains(name));
 
+            var result = await GetProductObjectsByPagesAsync(pq, query);
+
+            return result;
+        }
+        public async Task<int> GetCountForPaginationAsync(Filter f, int pageSize)
+        {
+            int total = 0;
+
+            if (f is FilterGun gun)
+            {
+                total = await GetFilterForGun(gun).CountAsync();
+            }
+            else if (f is FilterAmmo ammo)
+            {
+                total = await GetFilterForAmmo(ammo).CountAsync();
+            }
+            else if (f is FilterAccesorie acc)
+            {
+                total = await GetFilterForAccessory(acc).CountAsync();
+            }
+            else
+            {
+                total = await GetBasicFilter(f).CountAsync();
+            }
+
+            return (int)Math.Ceiling(total / (double)pageSize);
+        }
     }
 }

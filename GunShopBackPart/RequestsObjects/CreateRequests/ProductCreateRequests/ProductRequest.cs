@@ -17,6 +17,7 @@ namespace GunShopBackPart.RequestsObjects.CreateRequests.ProductCreateRequests
         public decimal Price { get; set; } = 0;
         public string SupplierName { get; set; } = string.Empty;
         public WeaponPermit RequiredPermit { get; set; } = WeaponPermit.None;
+        public string SerialNumber { get; set; } = string.Empty;
 
         public IFormFile? Image { get; set; }
 

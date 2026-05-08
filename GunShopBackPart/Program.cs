@@ -9,6 +9,7 @@ using GunShopBackPart.Tool.Crypto;
 using GunShopBackPart.Tool.JVT;
 using GunShopBackPart.Tool.Update;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -66,7 +67,13 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
-
+app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(builder.Environment.ContentRootPath, "img")),
+    RequestPath = "/img"
+});
 app.UseHttpsRedirection();
 
 app.UseAuthentication();

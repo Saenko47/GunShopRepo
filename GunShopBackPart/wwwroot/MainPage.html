@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My Website</title>
+    <link rel="stylesheet" href="CSS/MainStyle.css">
+       <link rel="stylesheet" href="CSS/ProductCardsStyle.css">
+   
+  </head>
+  <body>
+    <main>
+       <div class ="headerBox">
+        <div class = "menu">
+       <a>idk</a>
+       <a>idk2</a>
+       <a>idk3</a>
+       </div>
+
+       <a class = "UserInfo">Enter To the account</a>
+        </div>
+   <div class = "filterContainer hidden" id = "filterContainerId">
+            <label>Products per page</label>
+            <select id = "productsPerPageSelectorId" name = "productsPerPageSelector" class="searchInput">
+              <option value = "2">2</option>
+              <option value = "5">5</option>
+              <option value = "10">10</option>
+              <option value = "15">15</option>
+              <option value = "20">20</option>
+            </select>
+        <div class = "filter">
+         <label>Type of Product</label>
+         <select id = "filterProductTypeSelector" name = "filterSelector" class="searchInput">
+          <option value = "-">-</option>
+         <option value = "product">Products</option>
+         <option value = "gun">Guns</option>
+         <option value = "ammo">Ammos</option>
+         <option value = "accesorie">Accesoriess</option>
+          </select>
+          </div>
+         
+               <form id="filterForm"  >
+    <!-- сюда JS вставляет поля -->
+  </form>
+   </div>
+  
+   <button id = "showFilter" class="searchInput showFilter">unpack</button>
+
+        
+
+        <div class ="productContainer" id = "productContainerId">
+       
+              </div>
+             
+                  <div id = "pagination" class = " paginationClass hidden">
+      <span>0</span>
+      <button id = "leftButton"><-</button>
+      <span id = "currentPage"></span>
+      <button id = "rightButton">-></Button>
+        <span id = "totalProducts"></span>
+      </div>
+    </main>
+   <script src="JS/index.js"></script>
+    <script src="JS/filterFormSelector.js"></script>
+    <script src="JS/dataCollector.js"></script>
+    <script src="JS/sendToServer.js"></script>
+    <script src="JS/ProductFabric.js"></script>
+    <script src="JS/DrawProducts.js"></script>
+    <script src="JS/countOfProductsThisFilter.js"></script>
+    <script src = "JS/paginationButtons.js"></script>
+   
+
+  </body>
+</html>

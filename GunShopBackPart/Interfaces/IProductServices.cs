@@ -19,6 +19,7 @@ namespace GunShopBackPart.Interfaces
         Task<BaseProduct> UpdateProductAsync(UpdateProductRequest p);
          Task DeleteProductAsync(int id);
 
-        Task<List<ProductDTO>?> FindProductByNameAsync(string name);
+        Task<List<ProductDTO>?> FindProductByNameAsync(string name, PageQuery pq);
+        Task<int> GetCountForPaginationAsync(Filter f, int count);
     }
 }
