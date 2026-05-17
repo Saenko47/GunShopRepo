@@ -5,7 +5,9 @@ using GunShopBackPart.Models;
 using GunShopBackPart.RequestsObjects.RequestPurchase;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace GunShopBackPart.Repository
@@ -32,53 +34,130 @@ namespace GunShopBackPart.Repository
             }
             return purchases;
         }
-        private async Task<InventoryItem> FindInventoryItemById(int productId) 
+     
+        private async Task<List<BaseProduct>?> CheckForProducts(List<int> productIds)
         {
-            var product = await _context.Set<InventoryItem>()
-       .FirstOrDefaultAsync(p => p.ProductId == productId && !p.isSold);
+            var products = await _context.Set<BaseProduct>()
+        .Where(p => productIds.Contains(p.Id))
+        .ToListAsync();
 
-            if (product == null)
-            {
-                throw new KeyNotFoundException("Product not found.");
-            }
-            return product;
+            var foundIds = products.Select(p => p.Id).ToHashSet();
+
+            var missingIds = productIds.Where(id => !foundIds.Contains(id)).ToList();
+
+            if (missingIds.Count > 0)
+                throw new KeyNotFoundException(
+                    $"Products not found: {string.Join(", ", missingIds)}");
+
+            return products; ;
         }
-        public async Task Purchase(PurchaseRequest purcahseRequest)
+
+        private async Task<bool> CheckLicensesOfPurchase(
+    int customerId,
+    List<BaseProduct> products)
         {
-            var customer = await _customerServices.GetCustomerByIdAsync(purcahseRequest.CustomerId);
-            if(customer == null)
-            {
-                throw new KeyNotFoundException("Customer not found.");
-            }
-            var product = await _context.Set<BaseProduct>().FirstOrDefaultAsync(p => p.Id == purcahseRequest.ProductId);
-            if(product == null)
-            {
-                throw new KeyNotFoundException("Product not found.");
-            }
-            if (!await _context.Set<InventoryItem>().AnyAsync(i => i.ProductId == product.Id && !i.isSold)) 
+            var customerLicenses = await _context.Customers
+                .Where(c => c.Id == customerId)
+                .SelectMany(c => c.Licenses)
+                .Where(l => l.ExpirationDate > DateTime.Now)
+                .Select(l => l.PermitType)
+                .ToListAsync();
+
+            return products.All(p => customerLicenses.Contains(p.RequiredPermit));
+        }
+
+      
+        
+
+        private void CreateProductPurchaseItems(List<InventoryItem> items, ProductPurchase purchase) 
+        { 
+         
+            foreach (var item in items) 
             { 
-            throw new InvalidOperationException("Product is out of stock.");
-            }
-
-            if (!await _customerServices.IsCustomerHasLicenseAsync(customer.Id, product.RequiredPermit))
+            var product = new ProductPurchaseItem 
             {
-                throw new InvalidOperationException("Customer does not have the required license.");
-            }
-
-            var inventoryItem = await FindInventoryItemById(purcahseRequest.ProductId);
-            inventoryItem.isSold = true;
-
-            ProductPurchase purchase = new ProductPurchase
-            {
-                CustomerId = purcahseRequest.CustomerId,
-                InventoryItemId = inventoryItem.Id,
-                PurchaseDate = DateTime.Now 
+            Purchase = purchase,
+            Item = item
             };
+    
+                purchase.Items.Add(product);
+            }
            
-            set.Add(purchase);
+           
+        }
+        private async Task<List<InventoryItem>?> FindAvailableItems(List<BaseProduct> products, List<int> productIds)
+        {
+            var reservedItems = new List<InventoryItem>();
 
-            await _context.SaveChangesAsync();
-           
+            foreach (var product in products)
+            {
+                int requiredQuantity = productIds.Count(id => id == product.Id);
+                // 🔥 АТОМАРНО РЕЗЕРВИРУЕМ 1 доступный item
+                var item = await _context.Storage
+                    .Where(i => i.ProductId == product.Id && !i.isSold)
+                    .OrderBy(i => i.Id)
+                    .Take(requiredQuantity)
+                    .ToListAsync();
+
+                if (item.Count == 0 || item.Count < requiredQuantity)
+                    throw new InvalidOperationException($"Product {product.Name} is out of stock.");
+
+                // CAS update (защита от гонок)
+                var affected = await _context.Storage
+                    .Where(i => item.Select(x => x.Id).Contains(i.Id) && !i.isSold)
+                    .ExecuteUpdateAsync(s => s.SetProperty(x => x.isSold, true));
+
+                if (affected < requiredQuantity)
+                    throw new InvalidOperationException($"Race condition: some items of product {product.Name} were already taken.");
+
+                reservedItems.AddRange(item);
+            }
+            return reservedItems;
+        }
+
+    
+        public async Task Purchase(PurchaseRequest purchaseRequest)
+        {
+            await using var transaction =
+                await _context.Database.BeginTransactionAsync(IsolationLevel.Serializable);
+
+            try
+            {
+                var customer = await _customerServices.GetCustomerByIdAsync(purchaseRequest.CustomerId);
+                if (customer == null)
+                    throw new KeyNotFoundException("Customer not found.");
+
+                var products = await CheckForProducts(purchaseRequest.ProductId);
+                if (products == null)
+                    throw new KeyNotFoundException("Product not found.");
+
+                if (!await CheckLicensesOfPurchase(purchaseRequest.CustomerId, products))
+                    throw new InvalidOperationException("Customer does not have the required license.");
+
+                var inventoryItems = await FindAvailableItems(products, purchaseRequest.ProductId);
+                if (inventoryItems == null)
+                    throw new InvalidOperationException("Product is out of stock.");
+
+
+                var purchase = new ProductPurchase
+                {
+                    CustomerId = purchaseRequest.CustomerId,
+                    PurchaseDate = DateTime.UtcNow,
+                    Items = new List<ProductPurchaseItem>()
+                };
+
+                CreateProductPurchaseItems(inventoryItems, purchase);
+
+                set.Add(purchase);
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
         }
     }
 }

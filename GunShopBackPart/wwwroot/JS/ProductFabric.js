@@ -121,7 +121,8 @@ function CreateBase(data)
         supplierName,
         requiredPermit,
         imageUrl,
-        productType
+        productType,
+        isAvailable
     } = data;
 
     if (id == null || name == null || price == null) {
@@ -135,6 +136,7 @@ function CreateBase(data)
         supplierName,
         imageUrl,
         requiredPermit: fromEnumToStringRequiredPermit[requiredPermit] ?? "Unknown",
-        productType: fromEnumToStringProductType[productType] ?? "Unknown"
+        productType: fromEnumToStringProductType[productType] ?? "Unknown",
+        isAvailable
     };
 }

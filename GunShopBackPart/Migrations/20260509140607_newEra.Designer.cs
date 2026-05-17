@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GunShopBackPart.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20260424164735_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260509140607_newEra")]
+    partial class newEra
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,13 +33,27 @@ namespace GunShopBackPart.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Login")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Surname")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -65,7 +79,6 @@ namespace GunShopBackPart.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageUrl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -102,9 +115,16 @@ namespace GunShopBackPart.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Login")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -113,6 +133,13 @@ namespace GunShopBackPart.Migrations
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Surname")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("gmail")
                         .IsRequired()
@@ -143,6 +170,9 @@ namespace GunShopBackPart.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Location")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -152,14 +182,23 @@ namespace GunShopBackPart.Migrations
 
                     b.Property<string>("SerialNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("SoldAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("isSold")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Id")
+                        .IsUnique();
+
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("SerialNumber")
+                        .IsUnique();
 
                     b.ToTable("Storage");
                 });
@@ -174,6 +213,12 @@ namespace GunShopBackPart.Migrations
 
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("IssuedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("PermitType")
                         .HasColumnType("int");
@@ -199,9 +244,6 @@ namespace GunShopBackPart.Migrations
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
-                    b.Property<int>("InventoryItemId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("PurchaseDate")
                         .HasColumnType("datetime2");
 
@@ -209,9 +251,30 @@ namespace GunShopBackPart.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.HasIndex("InventoryItemId");
-
                     b.ToTable("GunPurchases");
+                });
+
+            modelBuilder.Entity("GunShopBackPart.Models.ProductPurchaseItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ItemId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PurchaseId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ItemId");
+
+                    b.HasIndex("PurchaseId");
+
+                    b.ToTable("ProductPurchaseItems");
                 });
 
             modelBuilder.Entity("GunShopBackPart.Models.Supplier", b =>
@@ -301,7 +364,7 @@ namespace GunShopBackPart.Migrations
                     b.HasOne("GunShopBackPart.Models.Supplier", "Supplier")
                         .WithMany("Products")
                         .HasForeignKey("SupplierId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Supplier");
                 });
@@ -333,18 +396,29 @@ namespace GunShopBackPart.Migrations
                     b.HasOne("GunShopBackPart.Models.Customer", "Customer")
                         .WithMany("GunPurchases")
                         .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("GunShopBackPart.Models.InventoryItem", "InventoryItem")
-                        .WithMany()
-                        .HasForeignKey("InventoryItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Customer");
+                });
 
-                    b.Navigation("InventoryItem");
+            modelBuilder.Entity("GunShopBackPart.Models.ProductPurchaseItem", b =>
+                {
+                    b.HasOne("GunShopBackPart.Models.InventoryItem", "Item")
+                        .WithMany()
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GunShopBackPart.Models.ProductPurchase", "Purchase")
+                        .WithMany("Items")
+                        .HasForeignKey("PurchaseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Item");
+
+                    b.Navigation("Purchase");
                 });
 
             modelBuilder.Entity("GunShopBackPart.Models.Accessorie", b =>
@@ -384,6 +458,11 @@ namespace GunShopBackPart.Migrations
                     b.Navigation("GunPurchases");
 
                     b.Navigation("Licenses");
+                });
+
+            modelBuilder.Entity("GunShopBackPart.Models.ProductPurchase", b =>
+                {
+                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("GunShopBackPart.Models.Supplier", b =>

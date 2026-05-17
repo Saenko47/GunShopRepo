@@ -14,6 +14,8 @@ const searchInput = document.getElementById("searchInputId");
 const filterButton = document.getElementById("showFilter");
 const filterContainer = document.getElementById("filterContainerId");
 
+const btn = document.getElementById("UserInfoId");
+
 const paginationState = 
 {
     pageCounter: 1,
@@ -21,6 +23,8 @@ const paginationState =
 };
 
 const totalProducts = 0;
+
+
 
 
 
@@ -81,3 +85,7 @@ rightButton.addEventListener("click", () => rightButtonHandler(paginationState,p
 
 
 filterButton.addEventListener("click", () => HandleFilterButton(filterContainer));
+
+
+
+

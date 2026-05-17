@@ -5,11 +5,9 @@
         public int Id { get; set; }
         public int CustomerId { get; set; }
         public Customer Customer { get; set; } = null!;
-        public int InventoryItemId { get; set; }
-        public InventoryItem InventoryItem { get; set; } = null!;
-        public DateTime PurchaseAt { get; set; } = DateTime.UtcNow;
-
 
         public DateTime PurchaseDate { get; set; } = DateTime.Now;
+
+        public List<ProductPurchaseItem> Items { get;set; } = new List<ProductPurchaseItem>();
     }
 }

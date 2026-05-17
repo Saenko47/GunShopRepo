@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GunShopBackPart.Repository
 {
-    public class ProductPurchaseServices: IProductPurchaseServices
+    public class ProductPurchaseServices : IProductPurchaseServices
     {
         private readonly ApplicationDBContext context;
 
@@ -15,19 +15,16 @@ namespace GunShopBackPart.Repository
             this.context = context;
         }
 
-        public async Task<List<ProductPurchaseDTO>> GetProductPurchasesAsync(int customerId) 
+        public async Task<List<ProductPurchaseDTO>> GetProductPurchasesAsync(int customerId)
         {
-            var query = await context.Set<ProductPurchase>()
+            return await context.Set<ProductPurchase>()
                 .Where(pp => pp.CustomerId == customerId)
-                .Select(pp => new ProductPurchaseDTO
+                .SelectMany(pp => pp.Items.Select(i => new ProductPurchaseDTO
                 {
-                    ProductName = pp.InventoryItem.Product.Name,
-                    PurchaseAt = pp.PurchaseAt
-                })
+                    ProductName = i.Item.Product.Name,
+                    PurchaseAt = pp.PurchaseDate
+                }))
                 .ToListAsync();
-
-           return query;
-
         }
 
     }

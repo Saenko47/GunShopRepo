@@ -1,0 +1,189 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #0f1115;
+    color: #e5e7eb;
+    min-height: 100vh;
+}
+
+/* HEADER */
+
+.headerBox {
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    height: 60px;
+    border-bottom: 1px solid #2a2f3a;
+}
+
+.menu {
+    display: flex;
+    gap: 25px;
+}
+
+.menu a {
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+.menu a:hover {
+    opacity: 1;
+}
+
+/* PAGE */
+
+.profilePage {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+}
+
+/* SIDEBAR */
+
+.profileSidebar {
+    width: 300px;
+    background: #1a1f29;
+    border: 1px solid #2a2f3a;
+    padding: 20px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+
+    height: fit-content;
+}
+
+.avatarBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.avatarCircle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+
+    background: #2a2f3a;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 48px;
+    font-weight: bold;
+}
+
+#userLogin {
+    opacity: 0.7;
+}
+
+.profileButton {
+    width: 100%;
+    padding: 12px;
+
+    background: #2a2f3a;
+    color: white;
+
+    border: none;
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.profileButton:hover {
+    background: #3a4150;
+}
+
+/* CONTENT */
+
+.profileContent {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* CARDS */
+
+.profileCard {
+    background: #1a1f29;
+    border: 1px solid #2a2f3a;
+    padding: 20px;
+}
+
+.cardHeader {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #2a2f3a;
+    padding-bottom: 10px;
+}
+
+/* INFO GRID */
+
+.infoGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.infoItem {
+    background: #151922;
+    border: 1px solid #2a2f3a;
+    padding: 15px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.infoTitle {
+    opacity: 0.7;
+    font-size: 14px;
+}
+
+.infoValue {
+    font-size: 16px;
+}
+
+/* LICENSES */
+
+.licenseContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.licenseItem {
+    padding: 12px 18px;
+
+    background: #151922;
+    border: 1px solid #2a2f3a;
+
+    transition: 0.2s;
+}
+
+.licenseItem:hover {
+    border-color: #3a4150;
+}
+
+/* MOBILE */
+
+@media (max-width: 900px) {
+
+    .profilePage {
+        flex-direction: column;
+    }
+
+    .profileSidebar {
+        width: 100%;
+    }
+
+}

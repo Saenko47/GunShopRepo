@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="CSS/Profile.css">
+</head>
+<body>
+
+    <!-- HEADER -->
+   
+    <!-- PROFILE -->
+    <main class="profilePage">
+
+        <!-- LEFT PANEL -->
+        <section class="profileSidebar">
+
+            <div class="avatarBox">
+                <div class="avatarCircle" id="avatarCircleId">
+                    B
+                </div>
+
+                <h2 id="userName">Bebra Lenin</h2>
+                <p id="userLogin">@bebralogin</p>
+            </div>
+
+            <button class="profileButton">
+                Edit profile
+            </button>
+            <button class="profileButton" id="LogoutBtnId">
+                Log out
+            </button>
+
+        </section>
+
+        <!-- RIGHT PANEL -->
+        <section class="profileContent">
+
+            <!-- USER INFO -->
+            <div class="profileCard">
+
+                <div class="cardHeader">
+                    <h2>Customer Information</h2>
+                </div>
+
+                <div class="infoGrid">
+
+                    <div class="infoItem">
+                        <span class="infoTitle">Name</span>
+                        <span class="infoValue" id="nameValue">
+                            Bebra
+                        </span>
+                    </div>
+
+                    <div class="infoItem">
+                        <span class="infoTitle">Surname</span>
+                        <span class="infoValue" id="surnameValue">
+                            Lenon
+                        </span>
+                    </div>
+
+                    <div class="infoItem">
+                        <span class="infoTitle">Login</span>
+                        <span class="infoValue" id="loginValue">
+                            bebralogin
+                        </span>
+                    </div>
+
+                    <div class="infoItem">
+                        <span class="infoTitle">Gmail</span>
+                        <span class="infoValue" id="gmailValue">
+                            example@gmail.com
+                        </span>
+                    </div>
+
+                    <div class="infoItem">
+                        <span class="infoTitle">Phone Number</span>
+                        <span class="infoValue" id="phoneValue">
+                            +380000000000
+                        </span>
+                    </div>
+
+                    <div class="infoItem">
+                        <span class="infoTitle">Created At</span>
+                        <span class="infoValue" id="createdAtValue">
+                            2026-05-16
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- LICENSES -->
+            <div class="profileCard">
+
+                <div class="cardHeader">
+                    <h2>Licenses</h2>
+                </div>
+
+                <div class="licenseContainer" id="licenseContainer">
+
+                    
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+     <script type="module" src="JS/profile.js"></script>
+    <script type="module" src="JS/cookieRepos.js"></script>
+</body>
+</html>

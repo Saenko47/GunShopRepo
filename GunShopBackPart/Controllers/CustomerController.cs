@@ -92,7 +92,7 @@ namespace GunShopBackPart.Controllers
 
             Response.Cookies.Append("AuthToken", token, new CookieOptions
             {
-                HttpOnly = true,
+                HttpOnly = false,
                 Secure = true,
                 SameSite = SameSiteMode.Strict,
                 Expires = DateTimeOffset.UtcNow.AddHours(1)
@@ -108,7 +108,7 @@ namespace GunShopBackPart.Controllers
             return Ok();
         }
 
-        [HttpGet("/customerProfile")]
+        [HttpGet("customerProfile")]
         [Authorize(Roles = "User")]
         public async Task<IActionResult> GetCustomerProfile() 
         {
@@ -122,7 +122,7 @@ namespace GunShopBackPart.Controllers
             var customerDTO = await customerServices.CreateCustomerDTO(customerId);
             return Ok(customerDTO);
         }
-        [HttpPut("/addlicense")]
+        [HttpPut("addlicense")]
         [Authorize(Roles = "User")]
         public async Task<IActionResult> AddLicense([FromForm]WeaponPermit req )
         {

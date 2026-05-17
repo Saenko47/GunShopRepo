@@ -7,10 +7,13 @@
     <title>My Website</title>
     <link rel="stylesheet" href="CSS/MainStyle.css">
        <link rel="stylesheet" href="CSS/ProductCardsStyle.css">
-   
+        <link rel="stylesheet" href="CSs/FormStyle.css">
+     <link rel="stylesheet" href="CSS/CartStyle.css">
+      
   </head>
   <body>
     <main>
+      <div id="overlay"></div>
        <div class ="headerBox">
         <div class = "menu">
        <a>idk</a>
@@ -18,7 +21,20 @@
        <a>idk3</a>
        </div>
 
-       <a class = "UserInfo">Enter To the account</a>
+       <button class = "UserInfo" id = "UserInfoId">Enter To the account</button>
+        </div>
+        <div class ="UserLoginForm  hidden" id = "UserLoginFormId">
+            <form id = "customerFormId">
+             
+              <input type="text" placeholder="Enter login" id = "login" class="searchInput">
+             
+              <input type="text" placeholder="Enter password" id = "password" class ="searchInput">
+              <label for="IsAdminId" class = "searchInput">Are you admin?</label>
+              <input type="checkbox" id="IsAdminId" class = "searchInput">
+             
+              <button type="submit" id = "loginSubmitBtn" class = "searchInput">log in</button>
+              <a href = "Registration.html" class = "searchInput">Wanna create new account?</a>
+            </form>
         </div>
    <div class = "filterContainer hidden" id = "filterContainerId">
             <label>Products per page</label>
@@ -60,16 +76,34 @@
       <button id = "rightButton">-></Button>
         <span id = "totalProducts"></span>
       </div>
-    </main>
-   <script src="JS/index.js"></script>
-    <script src="JS/filterFormSelector.js"></script>
-    <script src="JS/dataCollector.js"></script>
-    <script src="JS/sendToServer.js"></script>
-    <script src="JS/ProductFabric.js"></script>
-    <script src="JS/DrawProducts.js"></script>
-    <script src="JS/countOfProductsThisFilter.js"></script>
-    <script src = "JS/paginationButtons.js"></script>
+      <button id = "cartId" class="cart">
+        <p id = "cartItemCount" class="cartItemCount">0</p>
+      </button>
    
+        <div id = "cartItemsContainerId" class="cartItemsContainer hidden">
+          <h2>Cart</h2>
+          <div id = "cartItemsId" class="cartItems">
+            <!-- сюда JS вставляет товары в корзине -->
+          </div>
+          <button id = "BuyBtnId" class="searchInput">Buy Now</button>
+         
+        </div>
+    </div>
+    </main>
+   <script defer src="JS/index.js"></script>
+<script defer src="JS/filterFormSelector.js"></script>
+<script defer src="JS/dataCollector.js"></script>
+<script defer src="JS/sendToServer.js"></script>
+<script defer src="JS/ProductFabric.js"></script>
+<script defer src="JS/DrawProducts.js"></script>
+<script defer src="JS/countOfProductsThisFilter.js"></script>
+<script defer src="JS/paginationButtons.js"></script>
+<script type="module" src="JS/cart.js"></script>
+<script type="module" src="JS/login.js"></script>
+<script type="module" src="JS/cookieRepos.js"></script>
+<script type="module" src="JS/glassEffect.js"></script>
+<script type="module" src = "JS/cartContainer.js"></script>
+
 
   </body>
 </html>

@@ -73,6 +73,7 @@ namespace GunShopBackPart.Repository
             {
                 query = query.Where(e => e.Supplier.Name.Contains(filter.SupplierName));
             }
+            
             return query;
         }
         public async Task<List<ProductDTO>> GetProductObjectsByPagesAsync(PageQuery pq, IQueryable<BaseProduct> query)
@@ -82,7 +83,14 @@ namespace GunShopBackPart.Repository
                 .Take(pq.PageSize)
                 .ToListAsync();
 
-            return res.Select(e => e.ToProductDTO()).ToList();
+          var dtos = res.Select(e => e.ToProductDTO()).ToList();
+
+            foreach (var dto in dtos)
+            {
+                dto.IsAvailable = context.Set<InventoryItem>().Any(i => i.ProductId == dto.Id && i.isSold == false);
+            }
+
+            return dtos;
         }
         public async Task<List<ProductDTO>> GetProductObjectsByPages(PageQuery pq, Filter filter)
         {

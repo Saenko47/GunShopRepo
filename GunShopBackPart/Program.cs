@@ -1,3 +1,4 @@
+using GunShopBackPart.Controllers;
 using GunShopBackPart.Data;
 using GunShopBackPart.Interfaces;
 using GunShopBackPart.Mappers;
@@ -38,6 +39,7 @@ builder.Services.AddScoped(typeof(IProductPurchaseRepo), typeof(ProductPurchaseR
 builder.Services.AddScoped(typeof(IJVTProvider), typeof(JVTProvider));
 builder.Services.AddScoped(typeof(IProductPurchaseServices), typeof(ProductPurchaseServices));
 builder.Services.AddScoped(typeof(ILogin), typeof(LoginHelper));
+builder.Services.AddScoped(typeof(ISupplierService), typeof(SupplierServices));
 builder.Services.AddAuthenticationHeader(builder.Configuration);
 builder.Services.Configure<JvtOptions>(
     builder.Configuration.GetSection("JwtOptions"));

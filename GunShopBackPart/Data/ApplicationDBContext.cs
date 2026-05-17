@@ -22,6 +22,8 @@ namespace GunShopBackPart.Data
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Licens> Licenses { get; set; }
 
+        public DbSet<ProductPurchaseItem> ProductPurchaseItems { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             
@@ -41,9 +43,17 @@ namespace GunShopBackPart.Data
                 .WithMany(c => c.GunPurchases)
                 .HasForeignKey(pp => pp.CustomerId)
                 .OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<ProductPurchase>()
-                .HasIndex(p => p.InventoryItemId)
-                .IsUnique();
+                .HasMany(pp => pp.Items)
+                .WithOne(ppi => ppi.Purchase)
+                .HasForeignKey(ppi => ppi.PurchaseId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ProductPurchaseItem>()
+                .HasOne(ppi => ppi.Item)
+                .WithMany()
+                .HasForeignKey(ppi => ppi.ItemId);
 
             modelBuilder.Entity<InventoryItem>()
                 .HasIndex(ii => ii.Id).IsUnique();

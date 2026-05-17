@@ -1,5 +1,7 @@
 
+
 const container = document.getElementById("productContainerId");
+const cartItemCount = document.getElementById("cartItemCount");
 
 function renderProduct(product) {
     if (!container || !product) return;
@@ -20,36 +22,98 @@ function renderProducts(products) {
 
     container.appendChild(fragment);
 }
+function updateCartItemCount() {
+    const cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+    cartItemCount.textContent = cart.length;
+    console.log("Cart item count updated:", cart.length);
+    
+}
 
+function addToCart(product) {
+    let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+
+    cart.push(product);
+    console.log(cart);
+    sessionStorage.setItem("cart", JSON.stringify(cart));
+    updateCartItemCount();
+}
 // router
 function createProductElement(product) {
     switch (product.productType) {
         case "Gun":
-            return BuildCard(createGunCard(product));
+            return BuildCard(createGunCard(product), product);
         case "Ammo":
-            return BuildCard(createAmmoCard(product));
+            return BuildCard(createAmmoCard(product), product);
         case "Accessory":
-            return BuildCard(createAccessoryCard(product));
+            return BuildCard(createAccessoryCard(product), product  );
         default:
-            return BuildCard(createBaseCard(product));
+            return BuildCard(createBaseCard(product), product);
     }
 }
-function BuildCard(card)
+
+function getCookie(name, parseAsJwt = false) {
+    const cookies = document.cookie.split("; ");
+
+    for (const cookie of cookies) {
+        const [key, value] = cookie.split("=");
+
+        if (key === name) {
+
+            const decodedValue = decodeURIComponent(value);
+
+            if (parseAsJwt) {
+                return parseJwt(decodedValue);
+            }
+
+            return decodedValue;
+        }
+    }
+
+    return null;
+}
+
+function BuildCard(card, product)
 {
+
+    if(product.isAvailable && getCookie("AuthToken")) {
     const button = document.createElement("button");
     button.className = "buy-button searchInput";
-    button.textContent = "Buy";
+    button.textContent = "Buy"
+    button.addEventListener("click", () => {
+        addToCart(product);
+        console.log("Product added to cart:", product);
+          
+    });    
+    card.appendChild(button);;
+    }
+    else if(!getCookie("AuthToken"))     
+        {
+            const logInToBuy = document.createElement("p");
+            logInToBuy.className = "buy-button searchInput";
+            logInToBuy.textContent = "Log in to buy";
+            card.appendChild(logInToBuy);
+        }
+    else
+        {
+            const unavailable = document.createElement("p");
+             
+            unavailable.className = "buy-button searchInput";
+            unavailable.textContent = "Unavailable";
+            card.appendChild(unavailable);
+        }
+
 
     card.appendChild(document.createElement("br"));
-    card.appendChild(button);
+    
 
     return card;
 }
+
 // base
 function createBaseCard(product) {
     const div = document.createElement("div");
     div.className = "product-card base";
-
+    div.dataset.productId = product.id; // для идентификации при клике
     const img = document.createElement("img");
     img.src = product.imageUrl || "";
     img.alt = product.name;

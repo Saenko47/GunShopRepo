@@ -21,11 +21,20 @@ namespace GunShopBackPart.Controllers
         public async Task<IActionResult> Login([FromForm] CustomerLoginRequest req)
         {
            var token = await _adminServices.Login(req);
-            if (string.IsNullOrEmpty(token))
+            if (token == null)
             {
                 return Unauthorized();
             }
-            return Ok(token);
+
+            Response.Cookies.Append("AuthToken", token, new CookieOptions
+            {
+                HttpOnly = false,
+                Secure = true,
+                SameSite = SameSiteMode.Strict,
+                Expires = DateTimeOffset.UtcNow.AddHours(1)
+            });
+
+            return Ok();
         }
     }
 }

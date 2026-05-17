@@ -35,11 +35,6 @@ body {
     opacity: 1;
 }
 
-.UserInfo {
-    margin-left: auto;
-    cursor: pointer;
-    opacity: 0.8;
-}
 
 /* SEARCH */
 .searchPanel {
@@ -136,3 +131,14 @@ body {
     
     width: 98%;
 }
+
+.glass {
+    position: fixed;
+  inset: 0;
+  z-index: 50;
+
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+

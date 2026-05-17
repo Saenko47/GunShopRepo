@@ -20,7 +20,7 @@ namespace GunShopBackPart.Controllers
 
         [HttpPost("/buy")]
         [Authorize(Roles ="User")]
-        public async Task<IActionResult> PurchaseProduct([FromBody]int ProductIdt)
+        public async Task<IActionResult> PurchaseProduct([FromBody]List<int> ProductIdt)
         {
             var idClaim = User.FindFirst("id")?.Value;
             PurchaseRequest purchaseRequest = new PurchaseRequest
