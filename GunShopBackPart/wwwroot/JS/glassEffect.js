@@ -7,3 +7,10 @@ export function ToggleGlassEffect()
 
 }
 
+export function EnableGlassEffect() {
+    overlay.classList.add("glass");
+}
+
+export function DisableGlassEffect() {
+    overlay.classList.remove("glass");
+}

@@ -72,8 +72,9 @@ namespace GunShopBackPart.Controllers
             await customerServices.DeleteCustomerAsync(id);
             return Ok();
         }
+      
         [Authorize(Roles = "User")]
-        [HttpPut]
+        [HttpPut("update")]
         public async Task<IActionResult> UpdateCustomer([FromForm] CustomerUpdateRequest customer)
         {
             await customerServices.UpdateCustomerAsync(customer);

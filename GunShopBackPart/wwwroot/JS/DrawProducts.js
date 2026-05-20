@@ -29,10 +29,14 @@ function updateCartItemCount() {
     
 }
 
-function addToCart(product) {
+function addToCart(product, quantity) {
     let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
 
-    cart.push(product);
+   for (let i = 0; i < quantity; i++) {
+        cart.push(product);
+   }
+        
+        
     console.log(cart);
     sessionStorage.setItem("cart", JSON.stringify(cart));
     updateCartItemCount();
@@ -72,39 +76,106 @@ function getCookie(name, parseAsJwt = false) {
     return null;
 }
 
-function BuildCard(card, product)
-{
+function BuildCard(card, product) {
+    const isAuth = !!getCookie("AuthToken");
+    const available = product.quantity > 0;
 
-    if(product.isAvailable && getCookie("AuthToken")) {
-    const button = document.createElement("button");
-    button.className = "buy-button searchInput";
-    button.textContent = "Buy"
-    button.addEventListener("click", () => {
-        addToCart(product);
-        console.log("Product added to cart:", product);
-          
-    });    
-    card.appendChild(button);;
+    if (!available) {
+        const unavailable = document.createElement("p");
+        unavailable.className = "buy-button searchInput";
+        unavailable.textContent = "Unavailable";
+        card.appendChild(unavailable);
+
+        card.appendChild(document.createElement("br"));
+        return card;
     }
-    else if(!getCookie("AuthToken"))     
-        {
-            const logInToBuy = document.createElement("p");
-            logInToBuy.className = "buy-button searchInput";
-            logInToBuy.textContent = "Log in to buy";
-            card.appendChild(logInToBuy);
+
+    if (!isAuth) {
+        const logInToBuy = document.createElement("p");
+        logInToBuy.className = "buy-button searchInput";
+        logInToBuy.textContent = "Log in to buy";
+        card.appendChild(logInToBuy);
+
+        card.appendChild(document.createElement("br"));
+        return card;
+    }
+
+    // ===== Quantity UI =====
+    let currentQty = 1;
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "quantity-wrapper";
+
+    const minusBtn = document.createElement("button");
+    minusBtn.textContent = "<-";
+
+    const qtyLabel = document.createElement("span");
+    qtyLabel.textContent = currentQty;
+    qtyLabel.style.margin = "0 10px";
+
+    const plusBtn = document.createElement("button");
+    plusBtn.textContent = "->";
+
+    const updateQty = () => {
+        
+        qtyLabel.textContent = currentQty;
+    };
+
+    const updateAfterBuy = () => {
+        let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+        const inCart = cart.filter(p => p.id == product.id).length;
+        qtyLabel.textContent = product.quantity - inCart;
+        if(product.quantity - inCart <= 0) {
+            card.querySelector(".buy-button").textContent = "Unavailable";
+            plusBtn.disabled = true;
+            minusBtn.disabled = true;
         }
-    else
-        {
-            const unavailable = document.createElement("p");
-             
-            unavailable.className = "buy-button searchInput";
-            unavailable.textContent = "Unavailable";
-            card.appendChild(unavailable);
-        }
+        currentQty = parseInt(qtyLabel.textContent);
+    }
 
 
+
+    minusBtn.addEventListener("click", () => {
+        if (currentQty > 1) {
+            currentQty--;
+            updateQty();
+        }
+    });
+
+    plusBtn.addEventListener("click", () => {
+         let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+          cart = cart.filter(p => p.id == product.id);
+        if (currentQty < product.quantity-cart.length) {
+            currentQty++;
+            updateQty();
+        }
+    });
+
+    wrapper.appendChild(minusBtn);
+    wrapper.appendChild(qtyLabel);
+    wrapper.appendChild(plusBtn);
+
+    // ===== Buy button =====
+    const buyButton = document.createElement("button");
+    buyButton.className = "buy-button searchInput";
+    buyButton.textContent = "Buy";
+
+    buyButton.addEventListener("click", () => {
+        let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+        cart = cart.filter(p => p.id == product.id);
+        if(cart.length + currentQty > product.quantity) {
+            alert(`Cannot add ${product.name} items to cart`);
+            return;
+        }
+        addToCart(product, currentQty);
+        updateAfterBuy();
+        console.log("Added to cart:", product, "qty:", currentQty);
+    });
+
+    card.appendChild(wrapper);
     card.appendChild(document.createElement("br"));
-    
+    card.appendChild(buyButton);
+    card.appendChild(document.createElement("br"));
 
     return card;
 }

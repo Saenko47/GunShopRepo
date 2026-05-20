@@ -98,5 +98,10 @@ form.addEventListener("submit", async (e) => {
 
         HideLoginForm();
     }
+    else
+        {
+            alert("Login failed! Check your credentials.");
+            
+        }
 });
 

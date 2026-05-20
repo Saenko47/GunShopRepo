@@ -1,7 +1,7 @@
 
 import {ToggleGlassEffect} from "./glassEffect.js";
 import{Cart} from "./cartContainer.js";
-import {parseJwt, getCookie} from "./cookieRepos.js"
+
 
 const cartButton = document.getElementById("cartId");
 const cartItemsContainer = document.getElementById("cartItemsContainerId");
@@ -10,7 +10,7 @@ const cartItemsList = document.getElementById("cartItemsId");
 
 cartItemCount.textContent = Cart.get().length;
 
-function renderCartItems() {
+export function renderCartItems() {
    var cart = Cart.get();
     cartItemsList.innerHTML = ""; 
     cart.forEach(item => {
@@ -21,12 +21,9 @@ function renderCartItems() {
         removeButton.textContent = "Remove";
         removeButton.className = "searchButton";
        removeButton.addEventListener("click", (e) => {
-    e.preventDefault();
-    e.stopPropagation();
+   
 
-    if (!confirm("Are you sure you want to remove this item from the cart?")) {
-        return;
-    }
+   
 
     Cart.remove(item.id);
     renderCartItems();

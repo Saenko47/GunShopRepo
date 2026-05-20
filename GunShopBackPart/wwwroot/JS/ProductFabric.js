@@ -122,7 +122,7 @@ function CreateBase(data)
         requiredPermit,
         imageUrl,
         productType,
-        isAvailable
+        quantity,
     } = data;
 
     if (id == null || name == null || price == null) {
@@ -137,6 +137,8 @@ function CreateBase(data)
         imageUrl,
         requiredPermit: fromEnumToStringRequiredPermit[requiredPermit] ?? "Unknown",
         productType: fromEnumToStringProductType[productType] ?? "Unknown",
-        isAvailable
+         quantity,
+        isAvailable: quantity > 0,
+        
     };
 }

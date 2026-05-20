@@ -10,9 +10,20 @@ export const Cart = {
     },
 
     remove(id) {
-        let cart = this.get();
-        cart = cart.filter(i => i.id !== id);
-        sessionStorage.setItem("cart", JSON.stringify(cart));
+    let cart = this.get();
+
+   const index = cart.findIndex(p => p.id == id);
+    console.log("Removing item with id:", id, "Found index:", index);
+
+    if (index === -1) return;
+
+    cart.splice(index, 1);
+
+    sessionStorage.setItem("cart", JSON.stringify(cart));
+
+},
+    clear() {
+        sessionStorage.removeItem("cart");
     }
 };
 

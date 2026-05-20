@@ -27,7 +27,7 @@ namespace GunShopBackPart.DTOs
         public WeaponPermit RequiredPermit { get; set; } = WeaponPermit.None;
         public string? ImageUrl { get; set; } = string.Empty;
         
-        public bool IsAvailable { get; set; }
+        public int Quantity { get; set; } 
 
     }
 }

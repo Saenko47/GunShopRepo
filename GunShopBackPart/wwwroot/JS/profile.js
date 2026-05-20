@@ -22,10 +22,8 @@ function VisualizeProfile(data)
     }
 
 }
-
-async function GetProfileInfo() 
-{
-    const token = getCookie("AuthToken");
+export async function GetCustomerInfo() {
+   const token = getCookie("AuthToken");
 
     if (!token) {
         alert("You are not authorized!");
@@ -50,8 +48,19 @@ async function GetProfileInfo()
         alert("Failed to load profile");
         return;
     }
+    return await res.json();
+}
 
-    const data = await res.json();
+async function GetProfileInfo() 
+{
+    const data = await GetCustomerInfo();
+
+    if (!data) {
+        alert("Failed to load profile data.");
+        return;
+    }
+
+    
 
     VisualizeProfile(data);
 }

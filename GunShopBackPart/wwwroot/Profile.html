@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
     <link rel="stylesheet" href="CSS/Profile.css">
+    <link rel="stylesheet" href="CSS/MainStyle.css">
+    <link rel="stylesheet" href="CSS/FormStyle.css">
+    <link rel="stylesheet" href="CSS/PurchaseHistory.css">
 </head>
 <body>
 
@@ -15,6 +18,7 @@
 
         <!-- LEFT PANEL -->
         <section class="profileSidebar">
+              <div id="overlay"></div>
 
             <div class="avatarBox">
                 <div class="avatarCircle" id="avatarCircleId">
@@ -25,7 +29,7 @@
                 <p id="userLogin">@bebralogin</p>
             </div>
 
-            <button class="profileButton">
+            <button class="profileButton" id="editProfileBtnId">
                 Edit profile
             </button>
             <button class="profileButton" id="LogoutBtnId">
@@ -106,6 +110,53 @@
                 </div>
 
             </div>
+            <button id="showPurchaseHistoryBtn" class="searchInput showFilter">Show Purchase History</button>
+
+            <div id = "ProductPurchaseId" class = "UserLoginForm hidden">
+
+            </div>
+            <div class="profileCard">
+
+  
+<div id = "updateProfileFormId" class="UpdateForm hidden">
+    <form id="updateProfileForm" >
+
+        <div class="infoGrid">
+
+            <div class="infoItem">
+                <span class="infoTitle">Name</span>
+                <input type="text" id="editName" class="searchInput">
+            </div>
+
+            <div class="infoItem">
+                <span class="infoTitle">Surname</span>
+                <input type="text" id="editSurname" class="searchInput">
+            </div>
+
+            <div class="infoItem">
+                <span class="infoTitle">Gmail</span>
+                <input type="email" id="editGmail" class="searchInput">
+            </div>
+
+            <div class="infoItem">
+                <span class="infoTitle">Phone Number</span>
+                <input type="text" id="editPhone" class="searchInput">
+            </div>
+
+            <div class="infoItem">
+                <span class="infoTitle">Password</span>
+                <input type="password" id="editPassword" class="searchInput">
+            </div>
+
+        </div>
+
+        <button type="submit" class="profileButton">
+            Save Changes
+        </button>
+
+    </form>
+</div>
+</div>
 
         </section>
 
@@ -113,5 +164,8 @@
 
      <script type="module" src="JS/profile.js"></script>
     <script type="module" src="JS/cookieRepos.js"></script>
+    <script type="module" src="JS/glassEffect.js"></script>
+    <script type="module" src="JS/purchaseHistory.js"></script>
+    <script type="module" src="JS/changeCustomerProfile.js"></script>
 </body>
 </html>

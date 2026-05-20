@@ -87,7 +87,7 @@ namespace GunShopBackPart.Repository
 
             foreach (var dto in dtos)
             {
-                dto.IsAvailable = context.Set<InventoryItem>().Any(i => i.ProductId == dto.Id && i.isSold == false);
+                dto.Quantity = context.Set<InventoryItem>().Count(i => i.ProductId == dto.Id && i.isSold == false);
             }
 
             return dtos;

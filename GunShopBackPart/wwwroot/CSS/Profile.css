@@ -187,3 +187,21 @@ body {
     }
 
 }
+
+.UpdateForm
+{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 101;
+    background-color:#151922;
+    border: 1px solid gray;
+    border-radius: 5%;
+    padding: 20px;
+}
+
+.UpdateForm.hidden
+{
+    display: none;
+}
