@@ -20,7 +20,7 @@ const filterContainer = document.getElementById("filterContainerId");
 
 const btn = document.getElementById("UserInfoId");
 
-const paginationState = 
+export const paginationState = 
 {
     pageCounter: 1,
     maxOfPages: 0
@@ -52,6 +52,32 @@ select.addEventListener("change", () =>
                 innerFilter.innerHTML += ' <br><button type = "submit" class = "searchButton" >Enter</button>'
             }
     })
+
+
+    function renderPage()
+    {
+         document.getElementById("pagination").classList.remove("hidden");
+
+    paginationState.pageCounter = 1;
+    const form = e.target;
+    const filter = collectFilter(form);
+
+    console.log(filter);
+    let type = form.dataset.type;
+
+    console.log("Type:", type);
+    console.log("Filter:", filter);
+     const productsPerPage = parseInt(productsPerPageSelector.value);
+
+    GetCountOfProductsThisFilter(filter, select.value, productsPerPage)
+    .then(count => {
+        paginationState.maxOfPages = count;
+
+        document.getElementById("totalProducts").textContent = paginationState.maxOfPages;
+        document.getElementById("currentPage").textContent = paginationState.pageCounter;
+    });
+    sendToServer(paginationState.pageCounter, productsPerPage, filter, type, name);
+    }
 
     document.addEventListener("submit", function (e) {
     if (!e.target.matches("form")) return;

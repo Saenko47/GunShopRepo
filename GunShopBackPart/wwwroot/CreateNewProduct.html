@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="CSS/CreateNewProduct.css">
+    <title>Заголовок страницы</title>
+</head>
+<body>
+    <div class="registerContainer">
+    <form class="registerForm" id="createProductForm">
+        <h2>Create Product</h2>
+
+        <select id="productType">
+            <option value="gun">Gun</option>
+            <option value="ammo">Ammo</option>
+            <option value="accessory">Accessory</option>
+        </select>
+
+        <input type="text" id="name" placeholder="Name" required>
+        <input type="text" id="description" placeholder="Description" required>
+        <input type="number" id="price" placeholder="Price" required>
+        <input type="text" id="supplierName" placeholder="Supplier Name" required>
+        <input type="text" id="serialNumber" placeholder="Serial Number" required>
+
+        <select id="requiredPermit">
+            <option value="0">None</option>
+            <option value="1">Pistol</option>
+            <option value="2">Rifle</option>
+        </select>
+
+        <input type="file" id="image">
+
+        <div id="dynamicFields"></div>
+
+        <button type="submit">Create</button>
+    </form>
+
+
+</div>
+    <script type="module" src="JS/CreateProductForAdmin.js"></script>
+</body>
+</html>

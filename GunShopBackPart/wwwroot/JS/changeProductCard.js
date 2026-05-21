@@ -1,7 +1,21 @@
 import { CreateInput, CreateHiddenInput, CreateTextarea, CreateSelect } from "./UpdateProductHelper.js";
-
+import { getCookie, parseJwt } from "./cookieRepos.js";
 const form = document.getElementById("changeProductForm");
 
+const fromEnumToStringProductType = 
+{
+    0 : "Gun",
+    1: "Accessory",
+    2: "Ammo",
+    3: "None"
+};
+const fromEnumToStringRequiredPermit = 
+{
+    0 : "ForPistol",
+    1 : "ForRifle",
+    2 : "ForShotgun",
+    3 : "None"
+};
 const FetchForCertainProduct = 
 {
     "gun":"UpdateProductGun",
@@ -52,11 +66,21 @@ function BuildAmmoFields(product)
         )
     );
 }
-
-
-
-function BuildUpdateProductForm(product)
+function BuildAccessoryFields(product)
 {
+    form.appendChild(
+        CreateInput(
+            "text",
+            "AccessoryType",
+            product.accessoryType
+        )
+    );
+}
+
+
+export function BuildUpdateProductForm()
+{
+        const product = JSON.parse(sessionStorage.getItem("productToChange"));
     form.innerHTML = "";
 
     const title = document.createElement("h2");
@@ -138,8 +162,15 @@ function BuildUpdateProductForm(product)
     form.appendChild(submitButton);
 }
 
+document.addEventListener("submit", async (e) => {
+    if (e.target !== form) return;
+    e.preventDefault();
+    await changeProductCard();
+});
 
-async function changeProductCard(product) {
+
+async function changeProductCard() {
+    const product = JSON.parse(sessionStorage.getItem("productToChange"));
     const token = getCookie("AuthToken");
     if (!token) {
         alert("You are not authorized");
@@ -169,3 +200,4 @@ async function changeProductCard(product) {
         alert("Error updating product: " + error);
     }
 }
+

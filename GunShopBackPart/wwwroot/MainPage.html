@@ -14,7 +14,7 @@
   <body>
     <main>
       <div id="overlay"></div>
-       <div class ="headerBox">
+       <div class ="headerBox" id = "headerBoxId">
         <div class = "menu">
        <a>idk</a>
        <a>idk2</a>
@@ -27,9 +27,9 @@
         <div id = "Sort" class = "menu sortClass ">
           <label for="sortSelector">Sort by:</label>
           <select name="sort" id="sortSelector" class="searchInputForSort searchInputForFilter ">
-            <option value="default">Default</option>
-            <option value="price-low">Price: Low to High</option>
-            <option value="price-high">Price: High to Low</option>
+            <option value="Default">Default</option>
+            <option value="MinPrice">Price: Low to High</option>
+            <option value="MaxPrice">Price: High to Low</option>
           </select>
         </div>
         <div class ="UserLoginForm  hidden" id = "UserLoginFormId">
@@ -117,6 +117,8 @@
 <script type="module" src="JS/glassEffect.js"></script>
 <script type="module" src = "JS/cartContainer.js"></script>
 <script type="module" src = "JS/buy.js"></script>
+<script type="module" src = "JS/DeleteProductHandler.js"></script>
+<script type="module" src="JS/CheckIsAdmin.js"></script>
 
 
 

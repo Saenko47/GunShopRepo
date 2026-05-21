@@ -1,4 +1,5 @@
 ﻿using Azure.Core;
+using GunShopBackPart.DTOs;
 using GunShopBackPart.Interfaces;
 using GunShopBackPart.Mappers;
 using GunShopBackPart.Models;
@@ -22,53 +23,40 @@ namespace GunShopBackPart.Controllers
             _repo = repo;
 
         }
-        [HttpGet("test")]
-        public async Task<IActionResult> Test([FromQuery] PageQuery pq, [FromQuery] FilterGun filter)
-        {
-            var products = await _repo.GetGunObjectsByPages(pq, filter);
-
-            var test = products.First();
-
-            return Ok(new
-            {
-                obj = test,
-                type = test.GetType().Name
-            });
-        }
+        
+        
         [HttpGet("search")]
         public async Task<IActionResult> SearchProductByName([FromQuery] PageQuery pq,[FromQuery] string query)
         {
             var products = await _repo.FindProductByNameAsync(query, pq);
             return Ok(products);
         }
+        //Task<List<ProductDTO>> GetCertainTypeOfProductsByPages(PageQuery pq, Filter filter, ProductType type)
         [HttpGet("products")]
         public async Task<IActionResult> GetProducts([FromQuery] PageQuery pq, [FromQuery] Filter f)
         {
 
 
-            var products = await _repo.GetProductObjectsByPages(pq, f);
-
-
-
+            var products = await _repo.GetCertainTypeOfProductsByPages(pq, f, ProductType.None);
             return Ok(products);
 
         }
         [HttpGet("guns")]
         public async Task<IActionResult> GetGuns([FromQuery] PageQuery pq, [FromQuery] FilterGun filter)
         {
-            var products = await _repo.GetGunObjectsByPages(pq, filter);
+            var products = await _repo.GetCertainTypeOfProductsByPages(pq, filter, ProductType.Gun);
             return Ok(products);
         }
         [HttpGet("ammos")]
         public async Task<IActionResult> GetAmmos([FromQuery] PageQuery pq, [FromQuery] FilterAmmo filter)
         {
-            var products = await _repo.GetAmmoObjectsByPages(pq, filter);
+            var products = await _repo.GetCertainTypeOfProductsByPages(pq, filter, ProductType.Ammo);
             return Ok(products);
         }
         [HttpGet("accessories")]
         public async Task<IActionResult> GetAccessories([FromQuery] PageQuery pq, [FromQuery] FilterAccesorie filter)
         {
-            var products = await _repo.GetAccessoryObjectsByPages(pq, filter);
+            var products = await _repo.GetCertainTypeOfProductsByPages(pq, filter, ProductType.Accessory);
             return Ok(products);
         }
 

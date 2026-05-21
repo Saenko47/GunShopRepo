@@ -1,6 +1,7 @@
 import{Cart} from "./cartContainer.js";
 import {parseJwt, getCookie} from "./cookieRepos.js"
-import {renderCartItems} from "./cart.js";
+import {renderCartItems, exitFromCart} from "./cart.js";
+import {updateCartItemCount} from "./DrawProducts.js";
 
 const buyButton = document.getElementById("BuyBtnId");
 
@@ -37,6 +38,7 @@ buyButton.addEventListener("click", (e) => {
             updateCartItemCount();
             Cart.clear();
             renderCartItems();
+            exitFromCart();
 
         } else {
             alert("Purchase failed. Please try again.");

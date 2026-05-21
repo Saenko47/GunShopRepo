@@ -1,7 +1,9 @@
+const sortSelector = document.getElementById("sortSelector");
+
 export function collectFilter(form) {
     const data = {};
     const formData = new FormData(form);
-    
+    data.sortBy = sortSelector.value;
 
     for (let [key, value] of formData.entries()) {
         if (value === "") {

@@ -3,12 +3,27 @@ import {ToggleGlassEffect} from "./glassEffect.js";
 import{Cart} from "./cartContainer.js";
 
 
+
 const cartButton = document.getElementById("cartId");
 const cartItemsContainer = document.getElementById("cartItemsContainerId");
 const cartItemCount = document.getElementById("cartItemCount");
 const cartItemsList = document.getElementById("cartItemsId");
 
 cartItemCount.textContent = Cart.get().length;
+
+export function exitFromCart()
+{
+    cartItemsContainer.classList.add('hidden');
+    ToggleGlassEffect();
+}
+
+
+function updateCartItemCount()
+{
+    const cart = Cart.get();
+    cartItemCount.textContent = cart.length;
+    console.log("Cart item count updated:", cart.length);
+}
 
 export function renderCartItems() {
    var cart = Cart.get();
@@ -54,6 +69,7 @@ document.addEventListener('click', () => {
     if (!cartItemsContainer.classList.contains('hidden')) {
         cartItemsContainer.classList.add('hidden');
         ToggleGlassEffect();
+       
     }
 });
 

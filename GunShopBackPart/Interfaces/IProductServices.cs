@@ -10,9 +10,7 @@ namespace GunShopBackPart.Interfaces
     {
         Task<ProductDTO?> GetByIdAsync(int id);
         Task<List<ProductDTO>> GetProductObjectsByPages(PageQuery pq, Filter filter);
-        Task<List<ProductDTO>> GetGunObjectsByPages(PageQuery pq, FilterGun filter);
-        Task<List<ProductDTO>> GetAmmoObjectsByPages(PageQuery pq, FilterAmmo filter);
-        Task<List<ProductDTO>> GetAccessoryObjectsByPages(PageQuery pq, FilterAccesorie filter);
+       
 
 
         Task<BaseProduct> CreateProductAsync(ProductRequest productDTO);
@@ -20,6 +18,7 @@ namespace GunShopBackPart.Interfaces
          Task DeleteProductAsync(int id);
 
         Task<List<ProductDTO>?> FindProductByNameAsync(string name, PageQuery pq);
+        Task<List<ProductDTO>> GetCertainTypeOfProductsByPages(PageQuery pq, Filter filter, ProductType type);
         Task<int> GetCountForPaginationAsync(Filter f, int count);
     }
 }

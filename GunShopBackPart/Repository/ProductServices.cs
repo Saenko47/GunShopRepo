@@ -4,12 +4,13 @@ using GunShopBackPart.DTOs;
 using GunShopBackPart.Interfaces;
 using GunShopBackPart.Mappers;
 using GunShopBackPart.Models;
-using Microsoft.EntityFrameworkCore;
-using GunShopBackPart.Tool.PageCreation;
 using GunShopBackPart.RequestsObjects.CreateRequests.ProductCreateRequests;
 using GunShopBackPart.RequestsObjects.UpdateRequests.ProductUpdates;
+using GunShopBackPart.Tool.PageCreation;
+using Microsoft.EntityFrameworkCore;
 using static GunShopBackPart.Tool.PageCreation.FilterApplierForDiffTypes;
 using static GunShopBackPart.Tool.PageCreation.SortProductBySomething;
+using static System.Net.WebRequestMethods;
 
 namespace GunShopBackPart.Repository
 {
@@ -107,19 +108,28 @@ namespace GunShopBackPart.Repository
         {
           var baseQuery = GetBasicFilter(filter);
             IQueryable<BaseProduct> query;
-            switch (type)
+            if (type != ProductType.None)
             {
-                case ProductType.Gun:
-                    query = GetGun(baseQuery, filter as FilterGun);
-                    break;
-                case ProductType.Ammo:
-                    query = GetAmmo(baseQuery, filter as FilterAmmo);
-                    break;
-                case ProductType.Accessory:
-                    query = GetAccessory(baseQuery, filter as FilterAccesorie);
-                    break;
-                default:
-                    throw new ArgumentException("Invalid product type");
+
+
+                switch (type)
+                {
+                    case ProductType.Gun:
+                        query = GetGun(baseQuery, filter as FilterGun);
+                        break;
+                    case ProductType.Ammo:
+                        query = GetAmmo(baseQuery, filter as FilterAmmo);
+                        break;
+                    case ProductType.Accessory:
+                        query = GetAccessory(baseQuery, filter as FilterAccesorie);
+                        break;
+                    default:
+                        throw new ArgumentException("Invalid product type");
+                }
+            }
+            else 
+            { 
+             query = baseQuery;
             }
             if (filter.SortBy != SortBy.Default) 
             { 
@@ -127,65 +137,6 @@ namespace GunShopBackPart.Repository
             }
             return await GetProductObjectsByPagesAsync(pq, query);
         }
-
-        private IQueryable<Gun> GetFilterForGun(FilterGun filter)
-        {
-            var baseQuery = GetBasicFilter(filter);
-            var query = baseQuery.OfType<Gun>();
-            if (filter.Caliber.HasValue)
-            {
-                query = query.Where(e => e.Caliber == filter.Caliber);
-            }
-            if (filter.GunType.HasValue)
-            {
-                query = query.Where(e => e.GunType == filter.GunType);
-            }
-            return query;
-        }
-        public async Task<List<ProductDTO>> GetGunObjectsByPages(PageQuery pq, FilterGun filter)
-        {
-            var baseQuery = GetFilterForGun(filter);
-            return await GetProductObjectsByPagesAsync(pq, baseQuery);
-        }
-        private IQueryable<Ammo> GetFilterForAmmo(FilterAmmo filter)
-        {
-            var baseQuery = GetBasicFilter(filter);
-            var query = baseQuery.OfType<Ammo>();
-            if (filter.Caliber.HasValue)
-            {
-                query = query.Where(e => e.Caliber == filter.Caliber);
-            }
-            if (filter.Quantity.HasValue)
-            {
-                query = query.Where(e => e.AmountInBox == filter.Quantity);
-            }
-            return query;
-        }
-        public async Task<List<ProductDTO>> GetAmmoObjectsByPages(PageQuery pq, FilterAmmo filter)
-        {
-            var baseQuery = GetFilterForAmmo(filter);
-
-            return await GetProductObjectsByPagesAsync(pq, baseQuery);
-        }
-
-        private IQueryable<Accessorie> GetFilterForAccessory(FilterAccesorie filter)
-        {
-            var baseQuery = GetBasicFilter(filter);
-            var query = baseQuery.OfType<Accessorie>();
-            if (filter.AccessoryType.HasValue)
-            {
-                query = query.Where(e => e.Type == filter.AccessoryType);
-            }
-            return query;
-        }
-        public async Task<List<ProductDTO>> GetAccessoryObjectsByPages(PageQuery pq, FilterAccesorie filter)
-        {
-            var baseQuery = GetFilterForAccessory(filter);
-            return await GetProductObjectsByPagesAsync(pq, baseQuery);
-        }
-
-
-
 
         public async Task<BaseProduct?> FindProductByName(string name)
         {
@@ -288,19 +239,20 @@ namespace GunShopBackPart.Repository
         }
         public async Task<int> GetCountForPaginationAsync(Filter f, int pageSize)
         {
+            var query = GetBasicFilter(f);
             int total = 0;
 
             if (f is FilterGun gun)
             {
-                total = await GetFilterForGun(gun).CountAsync();
+                total = await GetGun(query, f as FilterGun).CountAsync();
             }
             else if (f is FilterAmmo ammo)
             {
-                total = await GetFilterForAmmo(ammo).CountAsync();
+                total = await GetAmmo(query, f as FilterAmmo).CountAsync();
             }
             else if (f is FilterAccesorie acc)
             {
-                total = await GetFilterForAccessory(acc).CountAsync();
+                total = await GetAccessory(query, f as FilterAccesorie).CountAsync();
             }
             else
             {
@@ -311,3 +263,5 @@ namespace GunShopBackPart.Repository
         }
     }
 }
+//GetCertainTypeOfProductsByPages(PageQuery pq, Filter filter, Pr
+//GetCertainTypeOfProductsByPages(PageQuery pq, Filter filter, ProductType type)

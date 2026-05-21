@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 namespace GunShopBackPart.DTOs
 {
     public enum ProductType
-    {
+    { 
         Gun,
         Accessory,
         Ammo,

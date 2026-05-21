@@ -1,7 +1,10 @@
-
+import{Cart} from "./cartContainer.js";
+import{DeleteProduct} from "./DeleteProductHandler.js";
+import { getCookie, parseJwt } from "./cookieRepos.js";
 
 const container = document.getElementById("productContainerId");
 const cartItemCount = document.getElementById("cartItemCount");
+
 
 export function renderProduct(product) {
     if (!container || !product) return;
@@ -23,7 +26,7 @@ export function renderProducts(products) {
     container.appendChild(fragment);
 }
 export function updateCartItemCount() {
-    const cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+    const cart = Cart.get();
     cartItemCount.textContent = cart.length;
     console.log("Cart item count updated:", cart.length);
     
@@ -55,30 +58,38 @@ function createProductElement(product) {
     }
 }
 
-function getCookie(name, parseAsJwt = false) {
-    const cookies = document.cookie.split("; ");
 
-    for (const cookie of cookies) {
-        const [key, value] = cookie.split("=");
-
-        if (key === name) {
-
-            const decodedValue = decodeURIComponent(value);
-
-            if (parseAsJwt) {
-                return parseJwt(decodedValue);
-            }
-
-            return decodedValue;
-        }
-    }
-
-    return null;
-}
 
 function BuildCard(card, product) {
+   
     const isAuth = !!getCookie("AuthToken");
-    const available = product.quantity > 0;
+    const available = product.quantity > 0 
+    const token = getCookie("AuthToken");
+    const payload = parseJwt(token);
+    const isAdmin = payload && payload.role === "Admin";
+if(isAdmin) {
+    const deleteButton = document.createElement("button");
+    deleteButton.className = "buy-button searchInput";
+    deleteButton.textContent = "Delete";
+    deleteButton.addEventListener("click", () => {
+        if (confirm(`Are you sure you want to delete ${product.name}?`)) {
+            DeleteProduct(product.id);
+        }
+    });
+
+    card.appendChild(deleteButton);
+
+     const changeButton = document.createElement("button");
+    changeButton.className = "buy-button searchInput";
+    changeButton.textContent = "Change";
+    changeButton.addEventListener("click", () => {
+        sessionStorage.setItem("productToChange", JSON.stringify(product));
+    window.location.href = "ChangeProductCard.html";
+
+    });
+
+    card.appendChild(changeButton);
+}
 
     if (!available) {
         const unavailable = document.createElement("p");
@@ -89,6 +100,17 @@ function BuildCard(card, product) {
         card.appendChild(document.createElement("br"));
         return card;
     }
+    const cart = Cart.get();
+        const inCart = cart.filter(p => p.id == product.id).length;
+        if(inCart >= product.quantity) {
+           const unavailable = document.createElement("p");
+        unavailable.className = "buy-button searchInput";
+        unavailable.textContent = "Unavailable";
+        card.appendChild(unavailable);
+
+        card.appendChild(document.createElement("br"));
+        return card;
+        }
 
     if (!isAuth) {
         const logInToBuy = document.createElement("p");
@@ -167,10 +189,14 @@ function BuildCard(card, product) {
             alert(`Cannot add ${product.name} items to cart`);
             return;
         }
+    
         addToCart(product, currentQty);
         updateAfterBuy();
         console.log("Added to cart:", product, "qty:", currentQty);
     });
+
+    
+
 
     card.appendChild(wrapper);
     card.appendChild(document.createElement("br"));
