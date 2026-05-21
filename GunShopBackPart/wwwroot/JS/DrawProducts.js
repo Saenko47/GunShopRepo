@@ -3,14 +3,14 @@
 const container = document.getElementById("productContainerId");
 const cartItemCount = document.getElementById("cartItemCount");
 
-function renderProduct(product) {
+export function renderProduct(product) {
     if (!container || !product) return;
 
     const element = createProductElement(product);
     if (element) container.appendChild(element);
 }
 
-function renderProducts(products) {
+export function renderProducts(products) {
     if (!container || !Array.isArray(products)) return;
 
     const fragment = document.createDocumentFragment();
@@ -22,14 +22,14 @@ function renderProducts(products) {
 
     container.appendChild(fragment);
 }
-function updateCartItemCount() {
+export function updateCartItemCount() {
     const cart = JSON.parse(sessionStorage.getItem("cart")) || [];
     cartItemCount.textContent = cart.length;
     console.log("Cart item count updated:", cart.length);
     
 }
 
-function addToCart(product, quantity) {
+export function addToCart(product, quantity) {
     let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
 
    for (let i = 0; i < quantity; i++) {

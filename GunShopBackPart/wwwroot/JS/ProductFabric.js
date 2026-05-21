@@ -49,7 +49,7 @@ const fromEnumToStringAccessoryType =
     9: "Other"
 };
 
-function GetProductsForRender(data)
+export function GetProductsForRender(data)
 {
     const result = [];
 

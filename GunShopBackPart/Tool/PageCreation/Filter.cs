@@ -3,6 +3,13 @@ using GunShopBackPart.Models;
 
 namespace GunShopBackPart.Tool.PageCreation
 {
+    public enum SortBy
+    {
+        Default,
+        MinPrice,
+        MaxPrice,
+        
+    }
     public class Filter
     {
         public string? Name { get; set; } = null;
@@ -14,6 +21,8 @@ namespace GunShopBackPart.Tool.PageCreation
         public WeaponPermit? RequiredPermit { get;  set; } = null;
 
         public string? SupplierName { get;  set; } = null;  
+
+        public SortBy? SortBy { get; set; } = null;
 
 
     }

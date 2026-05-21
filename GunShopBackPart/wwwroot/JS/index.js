@@ -1,4 +1,8 @@
-
+import{GetCountOfProductsThisFilter} from "./countOfProductsThisFilter.js";
+import{sendToServer} from "./sendToServer.js";
+import{GetForm} from "./filterFormSelector.js";
+import{collectFilter} from "./dataCollector.js";
+import{leftButtonHandler, rightButtonHandler, HandleFilterButton} from "./paginationButtons.js";
 
 const innerFilter = document.getElementById("filterForm");
 const select = document.getElementById("filterProductTypeSelector");

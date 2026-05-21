@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using GunShopBackPart.Tool.PageCreation;
 using GunShopBackPart.RequestsObjects.CreateRequests.ProductCreateRequests;
 using GunShopBackPart.RequestsObjects.UpdateRequests.ProductUpdates;
+using static GunShopBackPart.Tool.PageCreation.FilterApplierForDiffTypes;
+using static GunShopBackPart.Tool.PageCreation.SortProductBySomething;
 
 namespace GunShopBackPart.Repository
 {
@@ -100,6 +102,32 @@ namespace GunShopBackPart.Repository
             return await GetProductObjectsByPagesAsync(pq, query);
 
         }
+
+        public async Task<List<ProductDTO>> GetCertainTypeOfProductsByPages(PageQuery pq, Filter filter, ProductType type)
+        {
+          var baseQuery = GetBasicFilter(filter);
+            IQueryable<BaseProduct> query;
+            switch (type)
+            {
+                case ProductType.Gun:
+                    query = GetGun(baseQuery, filter as FilterGun);
+                    break;
+                case ProductType.Ammo:
+                    query = GetAmmo(baseQuery, filter as FilterAmmo);
+                    break;
+                case ProductType.Accessory:
+                    query = GetAccessory(baseQuery, filter as FilterAccesorie);
+                    break;
+                default:
+                    throw new ArgumentException("Invalid product type");
+            }
+            if (filter.SortBy != SortBy.Default) 
+            { 
+             query = SortProductBySomething.Sort(query, filter.SortBy);
+            }
+            return await GetProductObjectsByPagesAsync(pq, query);
+        }
+
         private IQueryable<Gun> GetFilterForGun(FilterGun filter)
         {
             var baseQuery = GetBasicFilter(filter);

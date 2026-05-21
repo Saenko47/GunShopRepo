@@ -1,5 +1,9 @@
 
-    function sendToServer(page, pageSize, filter, type) {
+
+    import { GetProductsForRender } from "./ProductFabric.js";
+    import { renderProducts } from "./DrawProducts.js";
+
+    export function sendToServer(page, pageSize, filter, type) {
     const params = new URLSearchParams();
 
     params.append("page", page);

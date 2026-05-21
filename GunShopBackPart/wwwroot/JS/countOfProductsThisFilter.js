@@ -1,6 +1,6 @@
 
 
-function GetCountOfProductsThisFilter(filter, type, count) 
+export function GetCountOfProductsThisFilter(filter, type, count) 
 {
     if(filter == null || type == null) return Promise.resolve(0);
 

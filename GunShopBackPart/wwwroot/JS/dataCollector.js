@@ -1,4 +1,4 @@
-function collectFilter(form) {
+export function collectFilter(form) {
     const data = {};
     const formData = new FormData(form);
     

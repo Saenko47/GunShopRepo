@@ -1,6 +1,7 @@
 
-
- function leftButtonHandler(state,productsContainer,filterType,productsPerPageSelector  )
+import { collectFilter } from "./dataCollector.js";
+import { sendToServer } from "./sendToServer.js";
+ export function leftButtonHandler(state,productsContainer,filterType,productsPerPageSelector  )
 {
     if (state.pageCounter > 1)
     {
@@ -25,7 +26,7 @@
     }
 }
 
- function rightButtonHandler(state,productsContainer,filterType,productsPerPageSelector)
+ export function rightButtonHandler(state,productsContainer,filterType,productsPerPageSelector)
 {
     if (state.pageCounter < state.maxOfPages)
     {
@@ -50,7 +51,7 @@
     }
 }
 
-function HandleFilterButton(container)
+export function HandleFilterButton(container)
 {
     if(!container.classList.contains("hidden")) container.classList.add("hidden");
     else container.classList.remove("hidden");

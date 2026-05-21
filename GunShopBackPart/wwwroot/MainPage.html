@@ -20,8 +20,17 @@
        <a>idk2</a>
        <a>idk3</a>
        </div>
-
+      
        <button class = "UserInfo" id = "UserInfoId">Enter To the account</button>
+       
+        </div>
+        <div id = "Sort" class = "menu sortClass ">
+          <label for="sortSelector">Sort by:</label>
+          <select name="sort" id="sortSelector" class="searchInputForSort searchInputForFilter ">
+            <option value="default">Default</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+          </select>
         </div>
         <div class ="UserLoginForm  hidden" id = "UserLoginFormId">
             <form id = "customerFormId">
@@ -36,9 +45,10 @@
               <a href = "Registration.html" class = "searchInput">Wanna create new account?</a>
             </form>
         </div>
-   <div class = "filterContainer hidden" id = "filterContainerId">
+        <div class = "bodyContainer">
+   <div class = "filterContainer" id = "filterContainerId">
             <label>Products per page</label>
-            <select id = "productsPerPageSelectorId" name = "productsPerPageSelector" class="searchInput">
+            <select id = "productsPerPageSelectorId" name = "productsPerPageSelector" class = "searchInputForFilter">
               <option value = "2">2</option>
               <option value = "5">5</option>
               <option value = "10">10</option>
@@ -47,7 +57,7 @@
             </select>
         <div class = "filter">
          <label>Type of Product</label>
-         <select id = "filterProductTypeSelector" name = "filterSelector" class="searchInput">
+         <select id = "filterProductTypeSelector" name = "filterSelector" class="searchInputForFilter">
           <option value = "-">-</option>
          <option value = "product">Products</option>
          <option value = "gun">Guns</option>
@@ -59,9 +69,10 @@
                <form id="filterForm"  >
     <!-- сюда JS вставляет поля -->
   </form>
+  
    </div>
   
-   <button id = "showFilter" class="searchInput showFilter">unpack</button>
+  
 
         
 
@@ -86,18 +97,20 @@
             <!-- сюда JS вставляет товары в корзине -->
           </div>
           <button id = "BuyBtnId" class="searchInput">Buy Now</button>
+          </div>
          
-        </div>
+       
     </div>
+  </div>
     </main>
-   <script defer src="JS/index.js"></script>
-<script defer src="JS/filterFormSelector.js"></script>
-<script defer src="JS/dataCollector.js"></script>
-<script defer src="JS/sendToServer.js"></script>
-<script defer src="JS/ProductFabric.js"></script>
-<script defer src="JS/DrawProducts.js"></script>
-<script defer src="JS/countOfProductsThisFilter.js"></script>
-<script defer src="JS/paginationButtons.js"></script>
+   <script  type="module" src="JS/index.js"></script>
+<script type="module" src="JS/filterFormSelector.js"></script>
+<script type="module" src="JS/dataCollector.js"></script>
+<script type="module" src="JS/sendToServer.js"></script>
+<script type="module" src="JS/ProductFabric.js"></script>
+<script type="module" src="JS/DrawProducts.js"></script>
+<script  type="module" src="JS/countOfProductsThisFilter.js"></script>
+<script type="module" src="JS/paginationButtons.js"></script>
 <script type="module" src="JS/cart.js"></script>
 <script type="module" src="JS/login.js"></script>
 <script type="module" src="JS/cookieRepos.js"></script>

@@ -1,5 +1,5 @@
 
-function GetForm(typeOfProduct)
+export function GetForm(typeOfProduct)
 {
     switch(typeOfProduct)
     {
@@ -30,16 +30,16 @@ function GiveProductForm()
     return `
 
         <label>Min Price:</label>
-        <input type="number" name="minPrice"  class="searchInput" />
+        <input type="number" name="minPrice"  class="searchInputForFilter" />
         <br>
         <label>Max Price:</label>
-        <input type="number" name="maxPrice"  class="searchInput" />
+        <input type="number" name="maxPrice"  class="searchInputForFilter" />
         <br>
         <label>Exact Price:</label>
-        <input type="number" name="price" step="0.01"  class="searchInput" />
+        <input type="number" name="price" step="0.01"  class="searchInputForFilter" />
         <br>
         <label>Required Permit:</label>
-        <select name="requiredPermit" class="searchInput">
+        <select name="requiredPermit" class="searchInputForFilter">
             <option value="">None</option>
             <option value="ForPistol">ForPistol</option>
             <option value="ForRifle">ForRifle</option>
@@ -47,10 +47,10 @@ function GiveProductForm()
         </select>
         <br>
         <label>Supplier Name:</label>
-        <input type="text" name="supplierName"  class="searchInput" />
+        <input type="text" name="supplierName"  class="searchInputForFilter" />
          <br>
          <input type="text"
-               class="searchInput"
+               class="searchInputForFilter"
                placeholder="Type name of product"
                name="name">
     `;
@@ -63,7 +63,7 @@ function GiveGunForm() {
             ${GiveProductForm()}
             <br>
             <label>Gun Type:</label>
-            <select name="gunType" class="searchInput">
+            <select name="gunType" class="searchInputForFilter">
                 <option value="">Any</option>
                 <option value="Pistol">Pistol</option>
                 <option value="Rifle">Rifle</option>
@@ -71,7 +71,7 @@ function GiveGunForm() {
             </select>
             <br>
             <label>Caliber:</label>
-            <select name="caliber" class="searchInput">
+            <select name="caliber" class="searchInputForFilter">
                 <option value="">Any</option>
                 <option value="Caliber9mm">9mm</option>
                 <option value="Caliber45ACP">.45 ACP</option>
@@ -91,7 +91,7 @@ function GiveAmmoForm() {
             ${GiveProductForm()}
             <br>
             <label>Caliber:</label>
-            <select name="caliber" class="searchInput">
+            <select name="caliber" class="searchInputForFilter">
                 <option value="">Any</option>
                 <option value="Caliber9mm">9mm</option>
                 <option value="Caliber45ACP">.45 ACP</option>
@@ -101,7 +101,7 @@ function GiveAmmoForm() {
             </select>
             <br>
             <label>Quantity:</label>
-            <input type="number" name="quantity" class="searchInput"/>
+            <input type="number" name="quantity" class="searchInputForFilter"/>
 
        
     `;
@@ -114,7 +114,7 @@ function GiveAccessoryForm() {
             ${GiveProductForm()}
              <br>
             <label>Accessory Type:</label>
-            <select name="accessoryType" class="searchInput">
+            <select name="accessoryType" class="searchInputForFilter">
                 <option value="">Any</option>
                 <option value="Optics">Optics</option>
                 <option value="Tactical">Tactical</option>
