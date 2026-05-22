@@ -9,6 +9,8 @@ const cartItemsContainer = document.getElementById("cartItemsContainerId");
 const cartItemCount = document.getElementById("cartItemCount");
 const cartItemsList = document.getElementById("cartItemsId");
 
+var cartCount = 0;
+
 cartItemCount.textContent = Cart.get().length;
 
 export function exitFromCart()
@@ -58,6 +60,7 @@ cartButton.addEventListener('click', (e) => {
 
     ToggleGlassEffect();
     renderCartItems();
+    cartCount = Cart.get().length;
 });
 
 cartItemsContainer.addEventListener("click", (e) => {
@@ -69,7 +72,12 @@ document.addEventListener('click', () => {
     if (!cartItemsContainer.classList.contains('hidden')) {
         cartItemsContainer.classList.add('hidden');
         ToggleGlassEffect();
+         if (cartCount != Cart.get().length) {
+       window.location.reload();
+    }
+
        
     }
+   
 });
 

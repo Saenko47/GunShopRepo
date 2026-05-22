@@ -146,7 +146,7 @@ if(isAdmin) {
     const updateAfterBuy = () => {
         let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
         const inCart = cart.filter(p => p.id == product.id).length;
-        qtyLabel.textContent = product.quantity - inCart;
+        qtyLabel.textContent = 1;
         if(product.quantity - inCart <= 0) {
             card.querySelector(".buy-button").textContent = "Unavailable";
             plusBtn.disabled = true;
