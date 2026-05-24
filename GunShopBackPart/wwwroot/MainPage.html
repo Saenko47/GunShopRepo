@@ -19,9 +19,10 @@
        <a>idk</a>
        <a>idk2</a>
        <a>idk3</a>
+        <button class = "UserInfo" id = "UserInfoId">Enter To the account</button>
        </div>
       
-       <button class = "UserInfo" id = "UserInfoId">Enter To the account</button>
+      
        
         </div>
         <div id = "Sort" class = "menu sortClass ">
@@ -33,6 +34,8 @@
           </select>
         </div>
         <div class ="UserLoginForm  hidden" id = "UserLoginFormId">
+          <button id = "UserLoginExitBtn" class = "exitBtn">X</button>
+          <br>
             <form id = "customerFormId">
              
               <input type="text" placeholder="Enter login" id = "login" class="searchInput">
@@ -80,7 +83,9 @@
        
               </div>
              
-                  <div id = "pagination" class = " paginationClass hidden">
+               
+  </div>
+     <div id = "pagination" class = " paginationClass hidden">
       <span>0</span>
       <button id = "leftButton"><-</button>
       <span id = "currentPage"></span>
@@ -92,16 +97,16 @@
       </button>
    
         <div id = "cartItemsContainerId" class="cartItemsContainer hidden">
-          <h2>Cart</h2>
+          <button class="cartCloseBtn" id = "exitCartBtn">✕</button>
+          <h2 id = "cartTitleId">Cart</h2>
           <div id = "cartItemsId" class="cartItems">
             <!-- сюда JS вставляет товары в корзине -->
           </div>
-          <button id = "BuyBtnId" class="searchInput">Buy Now</button>
+          <button id = "BuyBtnId" class="searchInput buyBtn hidden">Buy Now</button>
           </div>
          
        
     </div>
-  </div>
     </main>
    <script  type="module" src="JS/index.js"></script>
 <script type="module" src="JS/filterFormSelector.js"></script>
@@ -118,7 +123,7 @@
 <script type="module" src = "JS/cartContainer.js"></script>
 <script type="module" src = "JS/buy.js"></script>
 <script type="module" src = "JS/DeleteProductHandler.js"></script>
-<script type="module" src="JS/CheckIsAdmin.js"></script>
+<script type="module" src = "JS/exitBtnHandler.js"></script>
 
 
 

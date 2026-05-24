@@ -8,9 +8,10 @@ const btnLogin = document.getElementById("UserInfoId");
 const UserInfoForm = document.getElementById("UserLoginFormId");
 const overlay = document.getElementById("overlay");
 const form = document.getElementById("customerFormId");
+const exitBtn = document.getElementById("UserLoginExitBtn");
 
 var isUserIn = false;
-
+var isAdmin = false;
 
 
 
@@ -28,7 +29,11 @@ function initAuth() {
         isUserIn = false;
         return;
     }
-
+    
+    const role =
+  payload.role ||
+  payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+    isAdmin = role == "Admin";
     isUserIn = true;
     btnLogin.innerText = payload.username;
 }
@@ -45,10 +50,23 @@ function HideLoginForm()
     UserInfoForm.classList.add("hidden");
 }
 
+exitBtn.addEventListener("click", () =>
+    {
+       HideLoginForm();
+    });
+
 btnLogin.addEventListener("click", (e) => {
     if(isUserIn)
         {
-            window.location.href = "Profile.html";
+            if(isAdmin)
+                {
+                     window.location.href = "AdminPanel.html";
+                }
+            else{
+                
+             
+                  window.location.href = "Profile.html";
+            }
             return;
         }
      
@@ -77,6 +95,7 @@ form.addEventListener("submit", async (e) => {
     params.append("login", document.getElementById("login").value);
     params.append("password", document.getElementById("password").value);
     const typeOfUser = document.getElementById("IsAdminId").checked ? "Admin" : "Customer";
+   
     const res = await fetch(`/api/${typeOfUser}/login`, {
         method: "POST",
         headers: {
@@ -95,8 +114,13 @@ form.addEventListener("submit", async (e) => {
         const payload = parseJwt(token);
 
         btnLogin.innerText = payload.username;
-
+        
+    
+        console.log(payload.username);
         HideLoginForm();
+       
+        window.location.reload();
+
     }
     else
         {

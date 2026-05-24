@@ -33,9 +33,13 @@ namespace GunShopBackPart.Repository
             var newAdmin = new Admin
             {
                 Login = request.Login,
-                Password = crypto.Encrypt(request.Password)
+                Password = crypto.Encrypt(request.Password),
+                Name = request.Name,
+                Surname = request.Surname,
             };
             await admins.AddAsync(newAdmin);
+            await context.SaveChangesAsync();
+           
         }
         public async Task DeleteAdminAsync(int id)
         {

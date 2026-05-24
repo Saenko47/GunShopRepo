@@ -25,34 +25,32 @@ export function GetForm(typeOfProduct)
     }
 }
 
-function GiveProductForm()
-{
+function GiveProductForm() {
     return `
-
-        <label>Min Price:</label>
-        <input type="number" name="minPrice"  class="searchInputForFilter" />
-        <br>
-        <label>Max Price:</label>
-        <input type="number" name="maxPrice"  class="searchInputForFilter" />
-        <br>
-        <label>Exact Price:</label>
-        <input type="number" name="price" step="0.01"  class="searchInputForFilter" />
-        <br>
-        <label>Required Permit:</label>
-        <select name="requiredPermit" class="searchInputForFilter">
-            <option value="">None</option>
-            <option value="ForPistol">ForPistol</option>
-            <option value="ForRifle">ForRifle</option>
-            <option value="ForShotgun">ForShotgun</option>
-        </select>
-        <br>
-        <label>Supplier Name:</label>
-        <input type="text" name="supplierName"  class="searchInputForFilter" />
-         <br>
-         <input type="text"
-               class="searchInputForFilter"
-               placeholder="Type name of product"
-               name="name">
+        <div style="display: contents;">
+            <label>Min Price</label>
+            <input type="number" name="minPrice" class="searchInputForFilter" placeholder="0" />
+            
+            <label>Max Price</label>
+            <input type="number" name="maxPrice" class="searchInputForFilter" placeholder="10000" />
+            
+            <label>Exact Price</label>
+            <input type="number" name="price" step="0.01" class="searchInputForFilter" />
+            
+            <label>Required Permit</label>
+            <select name="requiredPermit" class="searchInputForFilter">
+                <option value="">None</option>
+                <option value="ForPistol">ForPistol</option>
+                <option value="ForRifle">ForRifle</option>
+                <option value="ForShotgun">ForShotgun</option>
+            </select>
+            
+            <label>Supplier Name</label>
+            <input type="text" name="supplierName" class="searchInputForFilter" />
+            
+            <label>Product Name</label>
+            <input type="text" class="searchInputForFilter" placeholder="Type name..." name="name">
+        </div>
     `;
 }
 

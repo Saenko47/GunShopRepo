@@ -1,0 +1,64 @@
+body {
+    background: #0f1115;
+    color: #e5e7eb;
+
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.adminPanel {
+    display: grid;
+    grid-template-columns: repeat(2, 250px);
+    gap: 25px;
+}
+
+/* CARD BUTTON */
+.adminCard {
+    background: #1a1f29;
+    border: 1px solid #2a2f3a;
+    padding: 25px;
+
+    min-height: 180px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.adminCard h2 {
+    margin-bottom: 10px;
+    font-size: 20px;
+    color: #e5e7eb;
+}
+
+.adminCard p {
+    opacity: 0.7;
+    font-size: 14px;
+}
+
+/* HOVER EFFECT */
+.adminCard:hover {
+    transform: translateY(-4px);
+    border-color: #3a4150;
+    background: #202634;
+}
+
+/* ACTIVE CLICK EFFECT */
+.adminCard:active {
+    transform: translateY(0px);
+}
+
+.exitCard {
+   background: #1a1f29;
+    border: 1px solid #2a2f3a;
+      min-height: 120px;
+    padding: 15px;
+   
+}

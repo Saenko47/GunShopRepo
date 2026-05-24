@@ -40,6 +40,7 @@ builder.Services.AddScoped(typeof(IJVTProvider), typeof(JVTProvider));
 builder.Services.AddScoped(typeof(IProductPurchaseServices), typeof(ProductPurchaseServices));
 builder.Services.AddScoped(typeof(ILogin), typeof(LoginHelper));
 builder.Services.AddScoped(typeof(ISupplierService), typeof(SupplierServices));
+builder.Services.AddScoped(typeof(IAdminServices), typeof(AdminSercives));
 builder.Services.AddAuthenticationHeader(builder.Configuration);
 builder.Services.Configure<JvtOptions>(
     builder.Configuration.GetSection("JwtOptions"));

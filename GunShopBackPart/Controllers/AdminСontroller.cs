@@ -9,18 +9,18 @@ namespace GunShopBackPart.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AdminСontroller : ControllerBase
+    public class AdminController : ControllerBase
     {
         private readonly IAdminServices _adminServices;
-        public AdminСontroller(IAdminServices adminServices)
+        public AdminController(IAdminServices adminServices)
         {
             _adminServices = adminServices;
         }
 
-        [HttpGet("login")]
+        [HttpPost("login")]
         public async Task<IActionResult> Login([FromForm] CustomerLoginRequest req)
         {
-           var token = await _adminServices.Login(req);
+            var token = await _adminServices.Login(req);
             if (token == null)
             {
                 return Unauthorized();
@@ -36,5 +36,23 @@ namespace GunShopBackPart.Controllers
 
             return Ok();
         }
+
+        [HttpPost("create")]
+        public async Task<IActionResult> Registr([FromBody] CreateAdminRequest req) 
+        {
+            try
+            {
+                await _adminServices.CreateAdminAsync(req);
+     
+            }
+            catch (Exception ex) 
+            {
+                Console.WriteLine(ex);
+                return BadRequest(ex.Message);
+            }
+            return Ok();
+
+        }
+
     }
 }

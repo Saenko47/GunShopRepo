@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+         <meta charset="UTF-8">
+        <link rel="stylesheet" href="CSS/AdminPanel.css">
+     
+    </head>
+<body>
+
+<div class="adminPanel">
+    <div class="adminCard" id="createProduct" onclick = "location.href = 'CreateNewProduct.html'">
+        <h2>Створити товар</h2>
+        <p>Додати новий това в систему</p>
+    </div>
+
+    <div class="adminCard" id="viewCustomers">
+        <h2>Покупці</h2>
+        <p>Всі покупціі</p>
+    </div>
+
+    <div class="adminCard" id="viewStats">
+        <h2>Статистика</h2>
+        <p>Аналітика</p>
+    </div>
+
+    <div class="adminCard" id="addSupplier">
+        <h2>Постачальники</h2>
+        <p>Додання нових постачальників</p>
+    </div>
+
+   <div class="adminCard exitCard" onclick="location.href='MainPage.html'">
+    <h2>Головна</h2>
+    <p>Повернутися на головну сторінку</p>
+</div>
+    <div class="adminCard exitCard" onclick='  document.cookie = "AuthToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    window.location.href = "MainPage.html";'>
+        <h2>Log out</h2>
+        </div>
+</div>
+
+</body>
+</html>

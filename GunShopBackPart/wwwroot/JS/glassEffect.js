@@ -8,9 +8,11 @@ export function ToggleGlassEffect()
 }
 
 export function EnableGlassEffect() {
+    if(overlay.classList.contains("glass")) return;
     overlay.classList.add("glass");
 }
 
 export function DisableGlassEffect() {
+if(!overlay.classList.contains("glass")) return;
     overlay.classList.remove("glass");
 }

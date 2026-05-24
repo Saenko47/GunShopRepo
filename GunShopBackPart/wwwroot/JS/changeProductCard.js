@@ -176,8 +176,12 @@ async function changeProductCard() {
         alert("You are not authorized");
         return;
     }
+   
     const payload = parseJwt(token);
-    if (payload.role != "Admin") {
+      const role =
+  payload.role ||
+  payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+    if (role != "Admin") {
         alert("You do not have permission to edit products.");
         return;
     }

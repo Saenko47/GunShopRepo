@@ -2,179 +2,436 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
 body {
-   
-
     background: #0f1115;
     color: #e5e7eb;
+    line-height: 1.6;
 }
 
 /* HEADER */
 .headerBox {
     display: flex;
     align-items: center;
-    padding: 0 20px;
-    height: 60px;
+    justify-content: flex-end;
+    padding: 0 40px;
+    height: 70px;
+    background: #161a23;
     border-bottom: 1px solid #2a2f3a;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
 }
 
 .menu {
     display: flex;
-    gap: 25px;
+    gap: 30px;
 }
 
 .menu a {
-    cursor: pointer;
-    opacity: 0.8;
+    text-decoration: none;
+    color: #9ca3af;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 14px;
+    transition: all 0.3s ease;
 }
 
 .menu a:hover {
-    opacity: 1;
+    color: #d4af37; /* Золотистый акцент */
+    text-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
 }
 
+/* SEARCH & FILTERS */
+.searchInput, .searchInputForFilter, .searchInputForSort {
+    padding: 10px 15px;
+    background: #1a1f29;
+    border: 1px solid #363c4a;
+    border-radius: 4px;
+    color: #fff;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
 
-/* SEARCH */
-.searchPanel {
+.searchInputForFilter:focus {
+    border-color: #9ca3af;;
+    box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+}
+
+/* FILTER CONTAINER */
+.filterContainer {
     display: flex;
     flex-direction: column;
-    padding: 10px 20px;
-    gap: 10px;
-    border-bottom: 1px solid #2a2f3a;
+    padding: 40px;
+    background: linear-gradient(145deg, #161a23 0%, #0f1115 100%);
+    min-height: 100vh;
+    gap: 20px;
 }
 
-.searchInput {
+#filterForm {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Поля в две колонки для красоты */
+    gap: 15px;
+    max-width: 500px;
+    width: 100%;
+}
+
+#filterForm label {
+    font-size: 13px;
+    color: #9ca3af;
+    margin-bottom: -10px;
+    margin-left: 10px;
+}
+
+/* LAYOUT & CARDS */
+.productContainer {
     flex: 1;
-    padding: 8px 12px;
-    margin: 10px;
-    background: #1a1f29;
+    padding: 30px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 25px;
+}
+
+.productCard {
+    background: #1c222d;
+    padding: 20px;
+    border-radius: 8px;
     border: 1px solid #2a2f3a;
-    color: white;
-}
-.searchInputForFilter {
-    padding: 8px 12px;
-    margin: 10px;
-    background: #1a1f29;
-    border: 1px solid #2a1f29;
-    color: white;
+    transition: transform 0.3s ease, border-color 0.3s ease;
 }
 
-.searchButton {
-    padding: 8px 16px;
-    background: #2a2f3a;
-    border: none;
-    cursor: pointer;
-    color: white;
+.productCard:hover {
+    transform: translateY(-5px);
+    border-color: #9ca3af;;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.4);
 }
 
-.searchButton:hover {
-    background: #3a4150;
+/* PAGINATION */
+/* Добавьте фон пагинации, чтобы она перекрывала контент, а не сливалась с ним */
+.paginationClass {
+    position: relative;
+    width: 100%;
+    padding: 15px 0;
+    margin-top: 30px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-top: 1px solid #2a2f3a;
+    background: #0f1115;
 }
+
+/* GLASS EFFECT */
+.glass {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    background: rgba(15, 17, 21, 0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* UTILS */
+.hidden { display: none !important; }
 
 /* LAYOUT */
 .bodyContainer {
     display: flex;
-    min-height: calc(100vh - 120px);
-    flex-direction: row;
+    min-height: calc(100vh - 70px); /* Вычитаем высоту хедера */
+    margin-top: 0;
 }
 
-/* FILTER */
-.filter {
-    width: 250px;
-    padding: 15px;
+/* SIDEBAR FILTER */
+.filterContainer {
+    width: 300px;
+    min-width: 300px;
+    height: calc(100vh - 70px);
+    position: sticky; /* Замирает при скролле контента */
+    top: 70px;
+    left: 0;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Фильтры начинаются сверху */
+    align-items: stretch;
+    
+    padding: 25px;
+    background: #161a23;
     border-right: 1px solid #2a2f3a;
+    overflow-y: auto; /* Если фильтров много, внутри будет скролл */
+    gap: 15px;
 }
 
-/* PRODUCTS */
-.productContainer {
-    flex: 1;
-    padding: 20px;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
-}
-
-/* CARD */
-.productCard {
-    background: #1a1f29;
-    padding: 15px;
-    border: 1px solid #2a2f3a;
-}
-
-.productCard:hover {
-    border-color: #3a4150;
-}
-
-.filterContainer.hidden {
-    display: none;
-}
-
-.paginationClass {
-    
-    position: fixed;
-    bottom: 0;
-    left: 50%;
-    
+/* Поправка для формы внутри сайдбара */
+#filterForm {
+    display: flex;
+    flex-direction: column; /* В сайдбаре лучше в одну колонку */
+    gap: 12px;
     width: 100%;
-    height: 60px;
-
-}
-.paginationClass.hidden
-{
-    display: none;
 }
 
-.filterContainer
-{
-    display: flex;
-    flex-direction: column;
+#filterForm label {
+    font-size: 12px;
+    color: #6b7280;
+    margin-bottom: -8px;
+    margin-left: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
 
-    justify-content: center;
-    align-items: center;
+.searchInputForFilter {
+    width: 100% !important; /* Растягиваем на всю ширину сайдбара */
+    margin: 0; /* Убираем лишние отступы */
+}
 
-    height: 100vh;
+/* CONTENT AREA */
+.productContainer {
+   flex: 1;
+    padding: 30px;
+    padding-bottom: 120px; /* Увеличили, чтобы последний ряд товаров был выше пагинации */
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 20px;
+    background: #0f1115;
 }
 
-.filter
-{
+/* Стили заголовков внутри фильтра */
+.filterContainer > label {
+    font-weight: bold;
+    font-size: 14px;
+    color: #9ca3af;;
+    margin-top: 10px;
+    border-bottom: 1px solid #2a2f3a;
+    padding-bottom: 5px;
+}
+.filterContainer::-webkit-scrollbar {
+    width: 8px; /* Ширина скроллбара */
+}
+
+.filterContainer::-webkit-scrollbar-track {
+    background: #161a23; /* Фоновый трек под цвет сайдбара */
+    border-left: 1px solid #2a2f3a;
+}
+
+.filterContainer::-webkit-scrollbar-thumb {
+    background: #3a4150; /* Цвет самого ползунка */
+    border-radius: 4px; /* Округление ползунка */
+}
+
+.filterContainer::-webkit-scrollbar-thumb:hover {
+    background:#9ca3af;; /* Ползунок становится золотистым при наведении */
+}
+
+/* Поддержка для Firefox */
+.filterContainer {
+    scrollbar-width: thin;
+    scrollbar-color: #3a4150 #161a23;
+}
+
+
+/* ==========================================================================
+   ИСПРАВЛЕНИЕ СЕЛЕКТОРОВ И СОРТИРОВКИ
+   ========================================================================== */
+.sortClass {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.searchInputForFilter
-{
-    width: 150px;
-}
-
-.showFilter
-{
-    
-    width: 98%;
-}
-
-.glass {
-    position: fixed;
-  inset: 0;
-  z-index: 50;
-
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-.sortClass
-{
     height: 5vh;
     width: 100%;
     align-items: center;
-    justify-content: end;
+    justify-content: flex-end;
+    padding: 0 30px;
+    background: #0f1115;
 }
-.searchInputForSort
-{
-    height: 100%;
-    width: 150px;
+
+/* Возвращаем компактный размер для сортировки */
+.searchInputForSort {
+    height: 38px;
+    width: 160px !important; /* Строго фиксируем ширину */
+    padding: 8px 12px;
+    background: #1a1f29;
+    border: 1px solid #363c4a;
+    border-radius: 4px;
+    color: #fff;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.searchInputForSort:focus {
+    border-color:#9ca3af;;
+}
+
+/* Гарантируем, что только инпуты ВНУТРИ формы фильтра будут на всю ширину */
+#filterForm .searchInputForFilter {
+    width: 100% !important;
+    margin: 0;
+}
+
+/* Прочие селекторы верхнего уровня (например, "Products per page") */
+.filterContainer > .searchInputForFilter {
+    width: 100% !important;
+    margin-bottom: 10px;
+}
+
+.searchButton {
+    position: relative;
+    z-index: 999;
+}
+
+.filterContainer {
+    width: 250px; /* Уменьшили с 300 */
+    min-width: 250px;
+    padding: 15px; /* Уменьшили отступы */
+}
+
+.filterContainer label {
+    font-size: 11px; /* Чуть меньше текст */
+    margin-bottom: 2px;
+}
+
+.searchInputForFilter {
+    padding: 6px 10px; /* Компактные инпуты */
+    font-size: 13px;
+}
+
+.filterContainer {
+    width: 240px;
+    min-width: 240px;
+    height: calc(100vh - 70px);
+    position: sticky;
+    top: 70px;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 10px;
+    gap: 10px;
+
+    background: #11151c;
+    border-right: 1px solid #2a2f3a;
+
+    overflow-y: auto;
+}
+
+/* Заголовки секций (Amazon-like) */
+.filterContainer > label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #9ca3af;
+
+    margin-top: 6px;
+    margin-bottom: 2px;
+
+    padding-left: 4px;
+}
+
+/* Контейнер формы */
+#filterForm {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* Инпуты / селекты */
+.searchInputForFilter {
+    width: 100% !important;
+    padding: 6px 8px;
+    font-size: 12px;
+
+    background: #1a1f29;
+    border: 1px solid #2f3542;
+    border-radius: 4px;
+
+    color: #e5e7eb;
+
+    transition: all 0.2s ease;
+}
+
+.searchInputForFilter:focus {
+    border-color: #4b5563;
+    box-shadow: 0 0 0 2px rgba(148, 163, 184, 0.15);
+}
+
+/* Hover ощущение как в AWS */
+.searchInputForFilter:hover {
+    border-color: #3a4150;
+}
+
+/* Верхние select (products per page и type) */
+.filterContainer > .searchInputForFilter {
+    margin-bottom: 4px;
+}
+
+/* Секции внутри фильтра */
+.filter {
+    padding: 6px;
+    border: 1px solid #2a2f3a;
+    border-radius: 6px;
+    background: #0f131a;
+}
+
+/* Scrollbar (AWS-like) */
+.filterContainer::-webkit-scrollbar {
+    width: 6px;
+}
+
+.filterContainer::-webkit-scrollbar-track {
+    background: #11151c;
+}
+
+.filterContainer::-webkit-scrollbar-thumb {
+    background: #2f3542;
+    border-radius: 4px;
+}
+
+.filterContainer::-webkit-scrollbar-thumb:hover {
+    background: #4b5563;
+}
+
+.filterContainer {
+    scrollbar-width: thin;
+    scrollbar-color: #2f3542 #11151c;
+}
+.sortClass {
+    display: flex;
+    height: 5vh;
+    width: 100%;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 30px;
+    background: #0f1115;
+}
+
+/* Возвращаем компактный размер для сортировки */
+.searchInputForSort {
+    height: 38px;
+    width: 160px !important; /* Строго фиксируем ширину */
+    padding: 8px 12px;
+    background: #1a1f29;
+    border: 1px solid #363c4a;
+    border-radius: 4px;
+    color: #fff;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.searchInputForSort:focus {
+    border-color: #d4af37;
+}
+
+/* Гарантируем, что только инпуты ВНУТРИ формы фильтра будут на всю ширину */
+#filterForm .searchInputForFilter {
+    width: 100% !important;
+    margin: 0;
+}
+
+/* Прочие селекторы верхнего уровня (например, "Products per page") */
+.filterContainer > .searchInputForFilter {
+    width: 100% !important;
+    margin-bottom: 10px;
 }

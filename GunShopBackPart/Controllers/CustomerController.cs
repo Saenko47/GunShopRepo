@@ -75,8 +75,9 @@ namespace GunShopBackPart.Controllers
       
         [Authorize(Roles = "User")]
         [HttpPut("update")]
-        public async Task<IActionResult> UpdateCustomer([FromForm] CustomerUpdateRequest customer)
+        public async Task<IActionResult> UpdateCustomer([FromBody] CustomerUpdateRequest customer)
         {
+       
             await customerServices.UpdateCustomerAsync(customer);
             return Ok();
         }
@@ -125,7 +126,7 @@ namespace GunShopBackPart.Controllers
         }
         [HttpPut("addlicense")]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> AddLicense([FromForm]WeaponPermit req )
+        public async Task<IActionResult> AddLicense([FromBody]WeaponPermit req )
         {
             var idClaim = User.FindFirst("id")?.Value;
 

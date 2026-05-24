@@ -75,17 +75,13 @@ namespace GunShopBackPart.Repository
         }
         public async Task UpdateCustomerAsync(CustomerUpdateRequest updatedCustomer)
         {
-            var customer = await set.FindAsync(updatedCustomer.Id);
+            var customer = await set.FirstOrDefaultAsync(c => c.Id == updatedCustomer.Id);
             if (customer == null) throw new Exception("Customer not found");
             customer.Name = updatedCustomer.Name ?? customer.Name;
             customer.Surname = updatedCustomer.Surname ?? customer.Surname;
-            customer.gmail = updatedCustomer.gmail ?? customer.gmail;
+            customer.gmail = updatedCustomer.Gmail ?? customer.gmail;
             customer.PhoneNumber = updatedCustomer.PhoneNumber ?? customer.PhoneNumber;
-            if (!string.IsNullOrEmpty(updatedCustomer.Password))
-            {
-                string encryptedPassword = crypto.Encrypt(updatedCustomer.Password);
-                customer.Password = encryptedPassword;
-            }
+           
             set.Update(customer);
             await context.SaveChangesAsync();
 

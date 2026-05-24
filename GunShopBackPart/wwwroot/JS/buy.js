@@ -41,7 +41,7 @@ buyButton.addEventListener("click", (e) => {
             exitFromCart();
 
         } else {
-            alert("Purchase failed. U dont have license");
+            alert("Purchase failed. You don't have a license");
         }
     })
     .catch(error => {

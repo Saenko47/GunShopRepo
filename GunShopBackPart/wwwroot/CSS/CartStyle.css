@@ -1,63 +1,143 @@
+/* Кнопка открытия корзины (плавающая) */
 .cart {
     position: fixed;
-    top: 90%;
-    right: 20px;
-    width: 50px;
-    height: 50px;
-    background-image: url('../res/cart.png');
-    background-size: cover;
-    border: 1px solid #2a2f3a;
+    bottom: 30px; /* лучше использовать bottom, чем top 90% */
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    background: #2a2f3a url('../res/cart.png') no-repeat center;
+    background-size: 24px; /* иконка не должна быть на весь круг */
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 50%;
-    padding: 20px;
     z-index: 100;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .cart:hover {
     background-color: #3a4150;
     cursor: pointer;
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
 }
 
+.cart:active {
+    transform: translateY(0px) scale(0.95);
+}
+
+/* Счетчик товаров */
 .cartItemCount {
     position: absolute;
-    top: -5px;
-    right: -5px;
-    width: 20px;
-    height: 20px;
-    background-color: red;
+    top: 0;
+    right: 0;
+    width: 22px;
+    height: 22px;
+    background-color: #ff4757; /* более современный красный */
     color: white;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 12px;
+    font-size: 11px;
+    font-weight: bold;
+    border: 2px solid #1a1f29; /* отделяет счетчик от кнопки */
 }
 
-.cartItemsContainer
-{
+/* Контейнер корзины (Модальное окно) */
+.cartItemsContainer {
+    font-family: 'Inter', -apple-system, sans-serif;
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-
     z-index: 101;
-
-    width: 600px;
-    min-height: 400px;
-
-    background-color:black;
-    border: 1px solid gray;
-    border-radius: 10%;
-    overflow-y: auto;
-    padding: 10px;
+    width: 90%;
+    max-width: 500px; /* 600px часто слишком много для мобилок */
+    max-height: 80vh;
+    background-color: rgba(26, 31, 41, 0.95);
+    backdrop-filter: blur(10px); /* эффект матового стекла */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px; /* мягкие углы вместо 10% */
+    padding: 30px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
 }
 
-.cartItemsContainer.hidden
-{
+.cartItemsContainer.hidden {
     display: none;
 }
 
-#BuyBtnId:hover
-{
-      cursor: pointer;
-        background-color: #3a4150;
+/* Заголовок */
+#cartTitleId {
+    color: white;
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+/* Список товаров */
+.cartItems {
+    margin-bottom: 20px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+/* Кастомизация скроллбара */
+.cartItems::-webkit-scrollbar {
+    width: 6px;
+}
+.cartItems::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+/* Кнопка закрытия */
+.cartCloseBtn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    
+    width: 28px;
+    height: 28px;
+
+    border: none;
+    border-radius: 6px;
+    border-radius: 5%;
+    color: #888;
+    font-size: 20px;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.cartCloseBtn:hover {
+    background-color: #ff4757;
+    color: white;
+}
+
+/* Кнопка купить */
+#BuyBtnId {
+    width: 100%;
+    padding: 15px;
+    border-radius: 12px;
+    border: none;
+    background: #3498db; /* приятный синий */
+    color: white;
+    font-weight: 600;
+    font-size: 16px;
+    transition: all 0.2s;
+    margin-top: auto;
+}
+
+#BuyBtnId:hover {
+    background-color: #2980b9;
+    cursor: pointer;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+}
+
+#BuyBtnId:active {
+    transform: translateY(0);
 }

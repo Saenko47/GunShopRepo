@@ -7,7 +7,10 @@ export async function DeleteProduct(id) {
         return;
     }
     const payload = parseJwt(token);
-    if (payload.role != "Admin") {
+    const role =
+  payload.role ||
+  payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+    if (role != "Admin") {
         alert("You do not have permission to delete products.");
         return;
     }   

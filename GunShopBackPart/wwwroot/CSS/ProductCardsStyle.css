@@ -55,3 +55,15 @@
     transform: translateY(-2px);
     transition: 0.2s ease;
 }
+
+
+.buy-button:hover
+{
+      cursor: pointer;
+        background-color: #3a4150;
+        transform: translateY(-4px);
+}
+.buy-button:active
+{
+   transform: translateY(0px);  
+}

@@ -65,8 +65,15 @@ function BuildCard(card, product) {
     const isAuth = !!getCookie("AuthToken");
     const available = product.quantity > 0 
     const token = getCookie("AuthToken");
+    var isAdmin = false;
     const payload = parseJwt(token);
-    const isAdmin = payload && payload.role === "Admin";
+    if(payload){
+     const role =
+  payload.role ||
+  payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+  
+     isAdmin = payload && role === "Admin";
+    }
 if(isAdmin) {
     const deleteButton = document.createElement("button");
     deleteButton.className = "buy-button searchInput";
@@ -90,6 +97,7 @@ if(isAdmin) {
 
     card.appendChild(changeButton);
 }
+  if(!isAdmin || !role){
 
     if (!available) {
         const unavailable = document.createElement("p");
@@ -195,13 +203,14 @@ if(isAdmin) {
         console.log("Added to cart:", product, "qty:", currentQty);
     });
 
-    
+
 
 
     card.appendChild(wrapper);
     card.appendChild(document.createElement("br"));
     card.appendChild(buyButton);
     card.appendChild(document.createElement("br"));
+}
 
     return card;
 }

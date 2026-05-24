@@ -4,26 +4,40 @@ const showPurchaseHistoryBtn = document.getElementById("showPurchaseHistoryBtn")
 
 const productPurchaseContainer = document.getElementById("ProductPurchaseId");
 
-showPurchaseHistoryBtn.addEventListener("click", (e) => {
+showPurchaseHistoryBtn.addEventListener("click", async (e) => {
     console.log("Show Purchase History button clicked");
+
     e.stopPropagation();
+
     productPurchaseContainer.classList.toggle("hidden");
     ToggleGlassEffect();
 
-    fetch("/api/ProductPurchase/Purchases", {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json"
+    try {
+        const response = await fetch("/api/ProductPurchase/Purchases", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        const res = await response.json();
+
+        if (res && res.length > 0) {
+            renderPurchaseHistory(res);
+        } else {
+            productPurchaseContainer.innerHTML = "";
+
+            const noPurchasesMessage = document.createElement("p");
+            noPurchasesMessage.textContent = "You have no purchase history.";
+            noPurchasesMessage.style.textAlign = "center";
+            noPurchasesMessage.style.margin = "20px";
+
+            productPurchaseContainer.appendChild(noPurchasesMessage);
         }
-    })
-    .then(response => response.json())
-    .then(data => {
-        renderPurchaseHistory(data);
-    })
-    .catch(error => {
-        console.error("Error fetching purchase history:", error);
-        alert("An error occurred while fetching purchase history. Please try again.");
-    });
+
+    } catch (error) {
+        console.error("Error loading purchase history:", error);
+    }
 });
 
 productPurchaseContainer.addEventListener("click", (e) => {
@@ -41,12 +55,7 @@ document.addEventListener("click", () => {
 function renderPurchaseHistory(purchases) 
 {
     productPurchaseContainer.innerHTML = "";
-    if (purchases.length === 0) {
-        const noPurchasesMessage = document.createElement("p");
-        noPurchasesMessage.textContent = "You have no purchase history.";
-        productPurchaseContainer.appendChild(noPurchasesMessage);
-        return;
-    }
+   
     purchases.forEach(purchase => {
         const purchaseDiv = document.createElement("div");
         purchaseDiv.className = "purchaseItem";

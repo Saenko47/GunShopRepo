@@ -22,7 +22,7 @@ async function  SetBase()
    document.getElementById("editSurname").value = data.surname;
    document.getElementById("editGmail").value = data.gmail;
    document.getElementById("editPhone").value = data.phoneNumber;
-   document.getElementById("editPassword").value = "";
+
 
 }
 
@@ -39,46 +39,41 @@ updateForm.addEventListener("submit", async (e) => {
 
     const payload = parseJwt(token);
 
-    const formData = new FormData();
-
-    formData.append("Id", payload.Id);
-
+   
     const name = document.getElementById("editName").value;
     const surname = document.getElementById("editSurname").value;
     const gmail = document.getElementById("editGmail").value;
     const phone = document.getElementById("editPhone").value;
-    const password = document.getElementById("editPassword").value;
 
-    if (name.trim() !== "")
-        formData.append("Name", name);
+    console.log("Payload ID:", payload.id);
 
-    if (surname.trim() !== "")
-        formData.append("Surname", surname);
-
-    if (gmail.trim() !== "")
-        formData.append("gmail", gmail);
-
-    if (phone.trim() !== "")
-        formData.append("PhoneNumber", phone);
-
-    if (password.trim() !== "")
-        formData.append("Password", password);
+   const body = {
+    Id: payload.id,
+    Name: name,
+    Surname: surname,
+    Gmail: gmail,
+    PhoneNumber: phone
+};
+console.log("Request body:", body);
 
     try {
 
-        const response = await fetch("https://localhost:5001/api/customer/update", {
-            method: "PUT",
-            headers: {
-                "Authorization": `Bearer ${token}`
-            },
-            body: formData
-        });
+        const response = await fetch("/api/Customer/update", {
+    method: "PUT",
+    headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify(body)
+});
+        console.log("Profile update response:", response);
 
         if (!response.ok) {
             throw new Error("Failed to update profile");
         }
 
         alert("Profile updated successfully");
+        window.location.reload();
 
     } catch (error) {
         console.error(error);

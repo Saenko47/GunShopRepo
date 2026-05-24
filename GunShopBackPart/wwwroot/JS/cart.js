@@ -8,6 +8,10 @@ const cartButton = document.getElementById("cartId");
 const cartItemsContainer = document.getElementById("cartItemsContainerId");
 const cartItemCount = document.getElementById("cartItemCount");
 const cartItemsList = document.getElementById("cartItemsId");
+const buyButton = document.getElementById("BuyBtnId");
+const cartTitle = document.getElementById("cartTitleId");
+const exitBtn = document.getElementById("exitCartBtn");
+
 
 var cartCount = 0;
 
@@ -51,9 +55,23 @@ export function renderCartItems() {
     
 }
 
+exitBtn.addEventListener("click", () =>
+    {
+        exitFromCart();
+    })
+
 cartButton.addEventListener('click', (e) => {
     e.stopPropagation();
-
+    if(Cart.get().length === 0) 
+        {
+            buyButton.classList.add("hidden");
+                cartTitle.innerText = "Your cart is empty";
+        }
+    else
+        {
+            buyButton.classList.remove("hidden");
+            cartTitle.innerText = "Cart";
+        }
     cartItemsContainer.classList.toggle('hidden');
 
     console.log("Cart button clicked");
@@ -80,4 +98,6 @@ document.addEventListener('click', () => {
     }
    
 });
+
+
 

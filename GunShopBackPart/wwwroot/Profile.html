@@ -12,6 +12,11 @@
 <body>
 
     <!-- HEADER -->
+      <div class ="headerBox" id = "headerBoxId">
+        <div class = "menu">
+       <a href = "MainPage.html" class="menuLink">Main Page</a>
+       </div>
+       </div>
    
     <!-- PROFILE -->
     <main class="profilePage">
@@ -32,11 +37,28 @@
             <button class="profileButton" id="editProfileBtnId">
                 Edit profile
             </button>
+            <button id = "addLicenseBtnId" class="profileButton">
+                Add License
+                </button>
             <button class="profileButton" id="LogoutBtnId">
                 Log out
             </button>
 
+
         </section>
+        <div id = "addLicenseFormId" class="UserLoginForm hidden">
+            <form id = "addLicenseForm">
+
+              <input type="text" placeholder="Enter license key" id = "licenseKeyInputId" class="searchInput">
+              <select name="TypeOfLicense" id="licenseTypeSelect">
+                <option value="0">For Pistol</option>
+                <option value="1">For Rifle</option>
+                <option value="2">For Shotgun</option>
+              </select>
+              <button id = "addLicenseSubmitBtn" class = "searchInput">Add License</button>
+             
+            </form>
+            </div>
 
         <!-- RIGHT PANEL -->
         <section class="profileContent">
@@ -143,10 +165,7 @@
                 <input type="text" id="editPhone" class="searchInput">
             </div>
 
-            <div class="infoItem">
-                <span class="infoTitle">Password</span>
-                <input type="password" id="editPassword" class="searchInput">
-            </div>
+          
 
         </div>
 
@@ -167,5 +186,6 @@
     <script type="module" src="JS/glassEffect.js"></script>
     <script type="module" src="JS/purchaseHistory.js"></script>
     <script type="module" src="JS/changeCustomerProfile.js"></script>
+    <script type="module" src="JS/addLicense.js"></script>
 </body>
 </html>

@@ -1,4 +1,5 @@
-﻿using GunShopBackPart.RequestsObjects.CreateRequests.AdminCreateRequest;
+﻿using GunShopBackPart.Models;
+using GunShopBackPart.RequestsObjects.CreateRequests.AdminCreateRequest;
 using GunShopBackPart.RequestsObjects.LoginRequest;
 
 namespace GunShopBackPart.Interfaces
